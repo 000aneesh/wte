@@ -1,8 +1,13 @@
 package com.app.wte;
 
+import javax.annotation.Resource;
+
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import com.app.wte.util.StorageService;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -14,8 +19,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
-public class SpringAngularApplication {
+public class SpringAngularApplication implements CommandLineRunner {
 
+	@Resource
+	StorageService storageService;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringAngularApplication.class, args);
 	}
@@ -42,5 +50,11 @@ public class SpringAngularApplication {
 	private ApiInfo propertyServiceInfo() {
 		return new ApiInfoBuilder().title("WTE Service API").description("WTE Service information").version("1.0")
 				.build();
+	}
+	
+	@Override
+	public void run(String... arg) throws Exception {
+		storageService.deleteAll();
+		storageService.init();
 	}
 }

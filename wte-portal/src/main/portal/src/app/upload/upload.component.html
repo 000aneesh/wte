@@ -2,46 +2,41 @@
 <p>upload works!</p>
 
 
-  <form class="form-horizontal" [formGroup]="uploadForm">
-<div style="padding-top: 10px">
-	<label>Test Case Name</label> <input type="text" formControlName="testCase" />
-</div>
-<div style="padding-top: 10px">
-	<label>Template Name</label> <select formControlName="template"
-		name="template">
-		<option selected="" value="">Select One</option>
-		<option [ngValue]="templt._key" *ngFor="let templt of templateList">
+<form class="form-horizontal" [formGroup]="uploadForm">
+	<div style="padding-top: 10px">
+		<label>Test Case Name</label> <input type="text"
+			formControlName="testCase" />
+	</div>
+	<div style="padding-top: 10px">
+		<label>Template Name</label> <select formControlName="template"
+			name="template">
+			<option selected="" value="">Select One</option>
+			<option [ngValue]="templt._key" *ngFor="let templt of templateList">
 			{{templt._key}}</option>
-	</select>
+		</select>
 
+	</div>
+
+<div style="width: 500px">
+	<div *ngIf="currentFileUpload" class="progress">
+		<div class="progress-bar progress-bar-info progress-bar-striped"
+			role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+			aria-valuemin="0" aria-valuemax="100"
+			[ngStyle]="{width:progress.percentage+'%'}">
+			{{progress.percentage}}%</div>
+	</div>
 </div>
-<div style="padding-top: 10px">
-	<label for="fileSelect">Test Data</label> <input type="file"
-		class="form-control" name="fileSelect" ng2FileSelect
-		(click)="removeExistingFile();" [uploader]="uploader" />
-<!-- <span *ngFor="let item of uploader.queue">
+	<label class="btn btn-default"> <input type="file"
+		(change)="selectFile($event)">
+	</label>
 
+	<!-- 
+<button class="btn btn-success" [disabled]="!selectedFiles"
+	(click)="upload()">Upload</button>
+ -->
 
-		<button type="button" class="btn btn-success btn-xs"
-			(click)="item.upload()"
-			[disabled]="item.isReady || item.isUploading || item.isSuccess">
-			<span class="glyphicon glyphicon-upload"></span> Upload
-		</button>
-		<button type="button" class="btn btn-warning btn-xs"
-			(click)="item.cancel()" [disabled]="!item.isUploading">
-			<span class="glyphicon glyphicon-ban-circle"></span> Cancel
-		</button>
-		<button type="button" class="btn btn-danger btn-xs"
-			(click)="item.remove()">
-			<span class="glyphicon glyphicon-trash"></span> Remove
-		</button>
-
-	</span> -->	
-</div>
-
-
-<div style="padding-top: 10px">
-	<button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>
-</div>
+	<div style="padding-top: 10px">
+		<button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>
+	</div>
 
 </form>

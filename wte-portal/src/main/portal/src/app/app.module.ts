@@ -7,19 +7,18 @@ import {RouterModule, Routes} from '@angular/router';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app.routing.module';
 import {RoutingComponents} from './app.routing.module';
-
-import { FileSelectDirective } from 'ng2-file-upload';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RoutingComponents,
-    FileSelectDirective
+    RoutingComponents
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule
   ],

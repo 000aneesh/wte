@@ -4,6 +4,7 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {UploadComponent} from './upload/upload.component';
 import {AdminComponent} from './admin/admin.component';
+
 // Router
 const routes: Routes = [
  // { path: '', component: HomeComponent },
