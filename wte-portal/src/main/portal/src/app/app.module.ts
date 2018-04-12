@@ -1,25 +1,25 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Http, HttpModule } from '@angular/http';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {Http, HttpModule} from '@angular/http';
+import {RouterModule, Routes} from '@angular/router';
 
-import { AppComponent } from './app.component';
-import { UploadComponent } from './upload/upload.component';
-import { AdminComponent } from './admin/admin.component';
-
+import {AppComponent} from './app.component';
+import {AppRoutingModule} from './app.routing.module';
+import {RoutingComponents} from './app.routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UploadComponent,
-    AdminComponent
+    RoutingComponents
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

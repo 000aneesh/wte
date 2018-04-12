@@ -1,0 +1,10 @@
+<!-- Navigation -->
+
+<ul>
+	<li><a id="upload" title="Upload" [routerLink]="['/upload']"
+		[ngClass]="{'active': activeMenu == menu.UPLOAD}"
+		(click)="onUpload($event);">UPLOAD</a></li>
+	<li><a id="admin" title="Admin" [routerLink]="['/admin']"
+		[ngClass]="{'active': activeMenu == menu.ADMIN}"
+		(click)="onAdmin($event);">ADMIN</a></li>
+</ul>

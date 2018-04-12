@@ -34,7 +34,7 @@ public class BroadcastCounter {
 	                                    Iterator<DeferredResult<String>> it = subscribedClient.iterator();
 	                                                while(it.hasNext()) {
 	                                            DeferredResult<String> dr = it.next();
-	                                            dr.setResult("{ \"data\" : \"Deferred Broadcast News # "+ counter +"\" }");
+	                                            dr.setResult("{ \"data\" : "+ counter  +"}");
 	                                            System.out.println("counter: "+counter);
 	                                            it.remove();
 	                                     }
