@@ -7,3 +7,15 @@
 <br>
 {{outputMsg}}
 -->
+<div style="padding-top: 10px">
+	<label>Test Case Name</label> <input type="text" />
+</div>
+<div style="padding-top: 10px">
+	<label>Template Name</label> <select [(ngModel)]="template"
+		name="template">
+		<option selected="" value="">Select One</option>
+		<option [ngValue]="template.key" *ngFor="let template of templateList">
+            {{template.key}}
+          </option>
+	</select>
+</div>

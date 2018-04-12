@@ -22,6 +22,8 @@ export class UploadComponent implements OnInit, OnDestroy {
 
   destroy$: Subject<boolean>;
 
+  templateList: Array<any>;
+  template: string;
   constructor(private uploadService: UploadService) {
     //    this.continueProcessing = true;
     this.destroy$ = new Subject<boolean>();
@@ -35,7 +37,12 @@ export class UploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.template = '';
     this.continueProcessing = true;
+
+    this.templateList = [{'key': 'key 1', 'object': {'url': 'testUrl 1', 'xpath': 'some xpath 1'}},
+    {'key': 'key 2', 'object': {'url': 'testUrl 2', 'xpath': 'some xpath 2'}},
+    {'key': 'key 3', 'object': {'url': 'testUrl 3', 'xpath': 'some xpath 3'}}];
   }
 
   longPolling(event) {
