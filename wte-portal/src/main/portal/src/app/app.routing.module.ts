@@ -6,7 +6,7 @@ import {UploadComponent} from './upload/upload.component';
 import {AdminComponent} from './admin/admin.component';
 // Router
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+ // { path: '', component: HomeComponent },
   { path: 'upload', component: UploadComponent },
   { path: 'admin', component: AdminComponent },
   { path: '', redirectTo: '/upload', pathMatch: 'full' }
