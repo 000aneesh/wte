@@ -3,9 +3,12 @@ import {UploadService} from './upload.service';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/takeUntil';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
+
+import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-upload',
@@ -19,12 +22,14 @@ export class UploadComponent implements OnInit, OnDestroy {
   outputMsg = 'initial val';
   i = 0;
   continueProcessing = false;
-
+uploadForm: FormGroup;
   destroy$: Subject<boolean>;
 
+ uploader:FileUploader = new FileUploader({url:'http://localhost:3001/upload'});
+ 
   templateList: Array<any>;
   template: string;
-  constructor(private uploadService: UploadService) {
+  constructor(private uploadService: UploadService, private builder: FormBuilder) {
     //    this.continueProcessing = true;
     this.destroy$ = new Subject<boolean>();
 
@@ -39,10 +44,19 @@ export class UploadComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.template = '';
     this.continueProcessing = true;
+    
+    this.uploadForm = this.builder.group({
+			testCase: new FormControl(""),
+			template: new FormControl(""),
+			file: new FormData()
+			});
 
-    this.templateList = [{'key': 'key 1', 'object': {'url': 'testUrl 1', 'xpath': 'some xpath 1'}},
-    {'key': 'key 2', 'object': {'url': 'testUrl 2', 'xpath': 'some xpath 2'}},
-    {'key': 'key 3', 'object': {'url': 'testUrl 3', 'xpath': 'some xpath 3'}}];
+    this.templateList = [
+    {_key: 'key 1', object: {url: 'testUrl 1', xpath: 'some xpath 1'}},
+    {_key: 'key 2', object: {url: 'testUrl 2', xpath: 'some xpath 2'}},
+    {_key: 'key 3', object: {url: 'testUrl 3', xpath: 'some xpath 3'}},
+    {_key: 'key 4', object: {url: 'testUrl 4', xpath: 'some xpath 4'}}
+    ];
   }
 
   longPolling(event) {
@@ -89,8 +103,19 @@ export class UploadComponent implements OnInit, OnDestroy {
       );
   }
 
+removeExistingFile(){
+	if(this.uploader && this.uploader.queue[0]){
+	this.uploader.queue[0].remove();
+	}
+}
 
-
+onSubmit(){
+	if(this.uploadForm && this.uploadForm.value && this.uploadForm.value.testCase && this.uploadForm.value.template && this.uploader && this.uploader.queue[0]){
+			
+	this.uploadForm.value.file = this.uploader.queue[0].file;
+	
+	}
+}
 
   ngOnDestroy() {
     this.continueProcessing = false;
