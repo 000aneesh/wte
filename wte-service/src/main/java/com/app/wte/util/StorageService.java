@@ -1,5 +1,6 @@
 package com.app.wte.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -18,7 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class StorageService {
 
 	Logger log = LoggerFactory.getLogger(this.getClass().getName());
-	private final Path rootLocation = Paths.get("upload-dir");
+
+	private final Path rootLocation = Paths.get(new File("").getAbsolutePath());
+
+	// @Autowired
+	// public StorageService(@Value("${tempLocation}") String uploadDir) {
+	// rootLocation = Paths.get(uploadDir);
+	// }
 
 	public void store(MultipartFile file) {
 		try {

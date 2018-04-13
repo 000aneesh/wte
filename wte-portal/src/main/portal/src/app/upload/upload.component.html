@@ -12,21 +12,22 @@
 			name="template">
 			<option selected="" value="">Select One</option>
 			<option [ngValue]="templt._key" *ngFor="let templt of templateList">
-			{{templt._key}}</option>
+				{{templt._key}}</option>
 		</select>
 
 	</div>
 
-<div style="width: 500px">
-	<div *ngIf="currentFileUpload" class="progress">
-		<div class="progress-bar progress-bar-info progress-bar-striped"
-			role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
-			aria-valuemin="0" aria-valuemax="100"
-			[ngStyle]="{width:progress.percentage+'%'}">
-			{{progress.percentage}}%</div>
+	<div style="width: 500px">
+		<div *ngIf="currentFileUpload" class="progress">
+			<div class="progress-bar progress-bar-info progress-bar-striped"
+				role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+				aria-valuemin="0" aria-valuemax="100"
+				[ngStyle]="{width:progress.percentage+'%'}">
+				{{progress.percentage}}%</div>
+		</div>
 	</div>
-</div>
 	<label class="btn btn-default"> <input type="file"
+		accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
 		(change)="selectFile($event)">
 	</label>
 

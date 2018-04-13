@@ -26,9 +26,20 @@ export class UploadService {
       .catch(this._errorHandler);
   }
 
-  uploadFile(req) {
+  uploadFile(file) {
 
-    return this._http.post('/upload', req)
+    let formdata: FormData = new FormData();
+
+    formdata.append('file', file);
+
+    const req = new HttpRequest('POST', '/uploadFile', formdata, {
+      reportProgress: true,
+      responseType: 'text'
+    });
+
+    return this.http.request(req).catch(this._errorHandler);
+    
+ /*   return this._http.post('/upload', req)
       .map((response: Response) => {
         if (response.status < 200 || response.status >= 300) {
           throw new Error('This request has failed ' + response.status);
@@ -36,7 +47,7 @@ export class UploadService {
           return response.json();
         }
       })
-      .catch(this._errorHandler);
+      .catch(this._errorHandler);*/
   }
 
   longPollingAjax1() {
@@ -60,12 +71,10 @@ export class UploadService {
 
   pushFileToStorage(file: File): Observable<HttpEvent<{}>> {
     let formdata: FormData = new FormData();
-
     formdata.append('file', file);
-
     const req = new HttpRequest('POST', '/post', formdata, {
       reportProgress: true,
-      responseType: 'text'
+      responseType: 'json'
     });
 
     return this.http.request(req);
@@ -74,5 +83,13 @@ export class UploadService {
 
   getFiles(): Observable<any> {
     return this.http.get('/getallfiles');
+  }
+  
+    getTestRun(reqJSON): Observable<any> {
+     const req = new HttpRequest('POST', '/testRun', reqJSON, {
+      reportProgress: true,
+      responseType: 'text'
+    });
+    return this.http.request(req);
   }
 }

@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
-public class SpringAngularApplication implements CommandLineRunner {
+public class SpringAngularApplication {
 
 	@Resource
 	StorageService storageService;
@@ -52,9 +52,9 @@ public class SpringAngularApplication implements CommandLineRunner {
 				.build();
 	}
 	
-	@Override
+/*	@Override
 	public void run(String... arg) throws Exception {
 		storageService.deleteAll();
 		storageService.init();
-	}
+	}*/
 }

@@ -106,28 +106,32 @@ export class UploadComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.progress.percentage = 0;
-    this.currentFileUpload = this.selectedFiles.item(0);
     if (this.uploadForm && this.uploadForm.value && this.uploadForm.value.testCase
-      && this.uploadForm.value.template && this.currentFileUpload) {
+      && this.uploadForm.value.template && this.selectedFiles && this.selectedFiles.item(0)) {
 
-      this.progress.percentage = 0;
+      	this.progress.percentage = 0;
+    	this.currentFileUpload = this.selectedFiles.item(0);
+		this.uploadForm.value.file = this.selectedFiles.item(0);
 
-      this.currentFileUpload = this.selectedFiles.item(0);
-      this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(event => {
+
+      this.uploadService.uploadFile(this.currentFileUpload).subscribe(event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.progress.percentage = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
           console.log('File is completely uploaded!');
+         var respObj = JSON.parse(event.body);
+         this.initTestRun(respObj.filename);
+
         }
       });
 
-      this.selectedFiles = undefined;
+      //this.selectedFiles = undefined;
 
-      /*  debugger;
+      /*  
         this.uploadService.uploadFile(this.uploadForm.value)
           .subscribe(
           (response) => {// success
-            debugger;
+            
             if (response.type === HttpEventType.UploadProgress) {
               this.progress.percentage = Math.round(100 * response.loaded / response.total);
             } else if (response instanceof HttpResponse) {
@@ -140,6 +144,21 @@ export class UploadComponent implements OnInit, OnDestroy {
           });
   */
     }
+  }
+  
+  initTestRun(fName){
+  	var reqJSON = {testCase: 'ttt',
+  		fileName : fName,
+ 		templateKey : ''
+  	};
+  
+   this.uploadService.getTestRun(reqJSON).subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.progress.percentage = Math.round(100 * event.loaded / event.total);
+        } else if (event instanceof HttpResponse) {
+          console.log('getTestRun!');
+        }
+      });
   }
 
   selectFile(event) {
