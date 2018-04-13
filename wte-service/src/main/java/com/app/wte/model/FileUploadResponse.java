@@ -2,24 +2,38 @@ package com.app.wte.model;
 
 public class FileUploadResponse {
 
-	String filename;
-	
-	String statusMsg;
+	private String filePath;
 
-	public String getFilename() {
-		return filename;
+	private String status;
+
+	/**
+	 * @return the filePath
+	 */
+	public String getFilePath() {
+		return filePath;
 	}
 
-	public void setFilename(String filename) {
-		this.filename = filename;
+	/**
+	 * @param filePath
+	 *            the filePath to set
+	 */
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
-	public String getStatusMsg() {
-		return statusMsg;
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
 	}
 
-	public void setStatusMsg(String statusMsg) {
-		this.statusMsg = statusMsg;
+	/**
+	 * @param status
+	 *            the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

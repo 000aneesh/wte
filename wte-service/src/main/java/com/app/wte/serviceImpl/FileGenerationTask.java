@@ -18,36 +18,34 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.app.wte.model.TestRunRequest;
+import com.app.wte.service.Task;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.Version;
 
-import com.app.wte.model.TestRunRequest;
-import com.app.wte.service.Task;
-
 @Service(value="fileGenerationTask")
 public class FileGenerationTask implements Task {
-	
-	@Value("${tempLocation}")
-	private String tempLocation;
 	
 	@Value("${templatePath}")
 	private String templatePath;
 	
-	@Value("${destFile}")
-	private String destFile;
-	
+	private String outputFile;
 
 	@Override
 	public void execute(TestRunRequest testRunRequest) {
+		
+		this.outputFile = testRunRequest.getGeneratedFile();
+		
 		FileInputStream excelFile;
 		XSSFRow row;
 		XSSFCell cell;
 		XSSFCell cellVal;
 		Map<String, Object> parameterMap = new HashMap<String, Object>();
 		try {
-			excelFile = new FileInputStream(new File(tempLocation+ File.separator +testRunRequest.getFileName()));
+			excelFile = new FileInputStream(new File(testRunRequest.getInputFile()));
 		
 			XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
 			XSSFSheet sheet = workbook.getSheetAt(0);
@@ -142,7 +140,7 @@ public class FileGenerationTask implements Task {
 		//Writer inboundText = new StringWriter();		
 		
 		try {
-			file = new FileWriter (destFile,true);
+			file = new FileWriter (this.outputFile, true);
 			bw = new BufferedWriter(file); 
 			pw = new PrintWriter(bw);
 			cfg.setDirectoryForTemplateLoading(new File(templatePath));

@@ -1,3 +1,4 @@
+import {TestRunRequest} from '../model/testrunrequest';
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {UploadService} from './upload.service';
 import {Subject} from 'rxjs/Subject';
@@ -8,6 +9,8 @@ import {HttpClient, HttpResponse, HttpEventType} from '@angular/common/http';
 
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
+
+
 
 @Component({
   selector: 'app-upload',
@@ -109,9 +112,9 @@ export class UploadComponent implements OnInit, OnDestroy {
     if (this.uploadForm && this.uploadForm.value && this.uploadForm.value.testCase
       && this.uploadForm.value.template && this.selectedFiles && this.selectedFiles.item(0)) {
 
-      	this.progress.percentage = 0;
-    	this.currentFileUpload = this.selectedFiles.item(0);
-		this.uploadForm.value.file = this.selectedFiles.item(0);
+      this.progress.percentage = 0;
+      this.currentFileUpload = this.selectedFiles.item(0);
+      this.uploadForm.value.file = this.selectedFiles.item(0);
 
 
       this.uploadService.uploadFile(this.currentFileUpload).subscribe(event => {
@@ -119,19 +122,25 @@ export class UploadComponent implements OnInit, OnDestroy {
           this.progress.percentage = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
           console.log('File is completely uploaded!');
-         var respObj = JSON.parse(event.body);
-         this.initTestRun(respObj.filename);
+          const respObj = JSON.parse(event.body);
+
+          const testRunRequest: TestRunRequest = new TestRunRequest;
+          testRunRequest.inputFile = respObj.filePath;
+          testRunRequest.template = this.uploadForm.value.template;
+          testRunRequest.testCase = this.uploadForm.value.testCase;
+
+          this.initTestRun(testRunRequest);
 
         }
       });
 
-      //this.selectedFiles = undefined;
+      // this.selectedFiles = undefined;
 
-      /*  
+      /*
         this.uploadService.uploadFile(this.uploadForm.value)
           .subscribe(
           (response) => {// success
-            
+
             if (response.type === HttpEventType.UploadProgress) {
               this.progress.percentage = Math.round(100 * response.loaded / response.total);
             } else if (response instanceof HttpResponse) {
@@ -145,20 +154,16 @@ export class UploadComponent implements OnInit, OnDestroy {
   */
     }
   }
-  
-  initTestRun(fName){
-  	var reqJSON = {testCase: 'ttt',
-  		fileName : fName,
- 		templateKey : ''
-  	};
-  
-   this.uploadService.getTestRun(reqJSON).subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          this.progress.percentage = Math.round(100 * event.loaded / event.total);
-        } else if (event instanceof HttpResponse) {
-          console.log('getTestRun!');
-        }
-      });
+
+  initTestRun(testRunRequest: TestRunRequest) {
+    this.progress.percentage = 0;
+    this.uploadService.getTestRun(testRunRequest).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        this.progress.percentage = Math.round(100 * event.loaded / event.total);
+      } else if (event instanceof HttpResponse) {
+        console.log('getTestRun!');
+      }
+    });
   }
 
   selectFile(event) {

@@ -19,42 +19,30 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
-public class SpringAngularApplication {
+public class SpringAngularApplication implements CommandLineRunner {
 
 	@Resource
 	StorageService storageService;
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(SpringAngularApplication.class, args);
 	}
 
-	/*
-	 * * This method used to generate service api
-	 *
-	 * @return docket
-	 */
 	@Bean
 	public Docket propertyServiceApi() {
-		// formatter:off
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(propertyServiceInfo()).select()
 				.apis(RequestHandlerSelectors.basePackage("com.app.wte.controller")).paths(PathSelectors.any()).build()
 				.pathMapping("/");
-		// formatter:on
 	}
 
-	/**
-	 * This method used to display property service information
-	 *
-	 * @return apiInfo
-	 */
 	private ApiInfo propertyServiceInfo() {
 		return new ApiInfoBuilder().title("WTE Service API").description("WTE Service information").version("1.0")
 				.build();
 	}
-	
-/*	@Override
-	public void run(String... arg) throws Exception {
-		storageService.deleteAll();
+
+	@Override
+	public void run(String... args) throws Exception {
 		storageService.init();
-	}*/
+	}
+
 }

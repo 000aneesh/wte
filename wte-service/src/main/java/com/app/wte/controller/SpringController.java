@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,11 +33,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import com.app.wte.constants.WTEConstants;
 import com.app.wte.model.CsvDTO;
 import com.app.wte.model.FileUploadResponse;
 import com.app.wte.model.TestRunRequest;
 import com.app.wte.service.Task;
 import com.app.wte.util.StorageService;
+import com.app.wte.util.WTEUtils;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -54,9 +55,6 @@ public class SpringController {
 	// @Value("${excel.file.path}")
 	private String excelPath;
 
-	@Value("${tempLocation}")
-	private String newLoc;
-
 	@Autowired
 	@Qualifier("fileGenerationTask")
 	Task fileGenerationTask;
@@ -69,8 +67,8 @@ public class SpringController {
 	@Qualifier("fileUploadTask")
 	Task fileUploadTask;
 
-	@Value("${tempLocation}")
-	private String tempLocation;
+//	@Value("${tempLocation}")
+//	private String tempLocation;
 
 	@Autowired
 	StorageService storageService;
@@ -90,7 +88,7 @@ public class SpringController {
 	public ResponseEntity<List<CsvDTO>> templateDeatils(@RequestParam("msg") String msg)
 			throws InvalidFormatException, IllegalStateException, IOException {
 
-		List<CsvDTO> list = ExcelToObject.excelStudentReader(excelPath);
+		List<CsvDTO> list = ExcelToObject.excelReader(excelPath);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
@@ -101,18 +99,18 @@ public class SpringController {
 
 		FileUploadResponse fileUploadResponse = new FileUploadResponse();
 		try {
-			storageService.store(file);
+			String filePath = storageService.store(file);
 			files.add(file.getOriginalFilename());
 
 			message = "You successfully uploaded " + file.getOriginalFilename() + "!";
 
-			fileUploadResponse.setFilename(file.getOriginalFilename());
-			fileUploadResponse.setStatusMsg(message);
+			fileUploadResponse.setFilePath(filePath);
+			fileUploadResponse.setStatus(message);
 
 			return new ResponseEntity<>(fileUploadResponse, HttpStatus.OK);
 		} catch (Exception e) {
 			message = "FAIL to upload " + file.getOriginalFilename() + "!";
-			fileUploadResponse.setStatusMsg(message);
+			fileUploadResponse.setStatus(message);
 			return new ResponseEntity<>(fileUploadResponse, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
@@ -138,8 +136,10 @@ public class SpringController {
 
 	@RequestMapping(value = "/testRun")
 	public String getMessage(@RequestBody TestRunRequest testRunRequest) {
+		String outputFile = WTEUtils.geTempPath().toString() + File.separator + testRunRequest.getTestCase()
+				+ WTEConstants.UNDERSCORE + WTEUtils.getMilliSecTimeStamp() + WTEConstants.TXT_FILE_EXTN;
 
-		System.out.println("getFileName : " + testRunRequest.getFileName());
+		testRunRequest.setGeneratedFile(outputFile);
 
 		fileGenerationTask.execute(testRunRequest);
 
@@ -155,14 +155,15 @@ public class SpringController {
 		String status = "";
 		InputStream in = null;
 		OutputStream out = null;
-		String filename = "";
+		String filePath = "";
 		FileUploadResponse fileUploadResponse = new FileUploadResponse();
 		if (!file.isEmpty()) {
+			String tempLocation = WTEUtils.geTempPath().toString();
 			File dir = new File(tempLocation);
 			if (!dir.exists())
 				dir.mkdirs();
-			filename = file.getOriginalFilename();
-			File serverFile = new File(dir.getAbsolutePath() + File.separator + file.getOriginalFilename());
+			filePath = dir.getAbsolutePath() + File.separator + file.getOriginalFilename();
+			File serverFile = new File(filePath);
 			in = file.getInputStream();
 			out = new FileOutputStream(serverFile);
 			byte[] b = new byte[1024];
@@ -177,8 +178,8 @@ public class SpringController {
 		} else {
 			status = "Please select a file to upload";
 		}
-		fileUploadResponse.setFilename(filename);
-		fileUploadResponse.setStatusMsg(status);
+		fileUploadResponse.setFilePath(filePath);
+		fileUploadResponse.setStatus(status);
 		return fileUploadResponse;
 	}
 

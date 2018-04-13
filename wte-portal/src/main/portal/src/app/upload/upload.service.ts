@@ -28,26 +28,26 @@ export class UploadService {
 
   uploadFile(file) {
 
-    let formdata: FormData = new FormData();
+    const formdata: FormData = new FormData();
 
     formdata.append('file', file);
 
-    const req = new HttpRequest('POST', '/uploadFile', formdata, {
+    const req = new HttpRequest('POST', '/upload', formdata, {
       reportProgress: true,
       responseType: 'text'
     });
 
     return this.http.request(req).catch(this._errorHandler);
-    
- /*   return this._http.post('/upload', req)
-      .map((response: Response) => {
-        if (response.status < 200 || response.status >= 300) {
-          throw new Error('This request has failed ' + response.status);
-        } else {
-          return response.json();
-        }
-      })
-      .catch(this._errorHandler);*/
+
+    /*   return this._http.post('/upload', req)
+         .map((response: Response) => {
+           if (response.status < 200 || response.status >= 300) {
+             throw new Error('This request has failed ' + response.status);
+           } else {
+             return response.json();
+           }
+         })
+         .catch(this._errorHandler);*/
   }
 
   longPollingAjax1() {
@@ -70,7 +70,7 @@ export class UploadService {
   }
 
   pushFileToStorage(file: File): Observable<HttpEvent<{}>> {
-    let formdata: FormData = new FormData();
+    const formdata: FormData = new FormData();
     formdata.append('file', file);
     const req = new HttpRequest('POST', '/post', formdata, {
       reportProgress: true,
@@ -84,9 +84,9 @@ export class UploadService {
   getFiles(): Observable<any> {
     return this.http.get('/getallfiles');
   }
-  
-    getTestRun(reqJSON): Observable<any> {
-     const req = new HttpRequest('POST', '/testRun', reqJSON, {
+
+  getTestRun(reqJSON): Observable<any> {
+    const req = new HttpRequest('POST', '/testRun', reqJSON, {
       reportProgress: true,
       responseType: 'text'
     });

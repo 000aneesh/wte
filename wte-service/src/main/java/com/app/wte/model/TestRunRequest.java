@@ -1,28 +1,70 @@
 package com.app.wte.model;
 
 public class TestRunRequest {
-	
-	String testCase;
-	String fileName;
-	String templateKey;
-	
+
+	private String testCase;
+	private String inputFile;
+	private String template;
+	private String generatedFile;
+
+	/**
+	 * @return the testCase
+	 */
 	public String getTestCase() {
 		return testCase;
 	}
-	public void setTcId(String testCase) {
+
+	/**
+	 * @param testCase
+	 *            the testCase to set
+	 */
+	public void setTestCase(String testCase) {
 		this.testCase = testCase;
 	}
-	public String getFileName() {
-		return fileName;
+
+	/**
+	 * @return the inputFile
+	 */
+	public String getInputFile() {
+		return inputFile;
 	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+
+	/**
+	 * @param inputFile
+	 *            the inputFile to set
+	 */
+	public void setInputFile(String inputFile) {
+		this.inputFile = inputFile;
 	}
-	public String getTemplateKey() {
-		return templateKey;
+
+	/**
+	 * @return the template
+	 */
+	public String getTemplate() {
+		return template;
 	}
-	public void setTemplateKey(String templateKey) {
-		this.templateKey = templateKey;
+
+	/**
+	 * @param template
+	 *            the template to set
+	 */
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
+	/**
+	 * @return the generatedFile
+	 */
+	public String getGeneratedFile() {
+		return generatedFile;
+	}
+
+	/**
+	 * @param generatedFile
+	 *            the generatedFile to set
+	 */
+	public void setGeneratedFile(String generatedFile) {
+		this.generatedFile = generatedFile;
 	}
 
 }
