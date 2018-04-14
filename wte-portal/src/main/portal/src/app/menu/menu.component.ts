@@ -4,13 +4,13 @@ import {Location} from '@angular/common';
 import {GeneralConstants} from '../shared/constants';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['home.component.css'],
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
+  styleUrls: ['menu.component.css'],
   providers: []
 })
-export class HomeComponent implements OnInit {
-  menu = GeneralConstants.HOME;
+export class MenuComponent implements OnInit {
+  menu = GeneralConstants.MENU;
   activeMenu = '';
   // Header Drop-down toggle mode
   toggleFlag: number;

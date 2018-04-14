@@ -22,7 +22,7 @@ public class FTPTransferTask implements Task {
 	public void execute(TestRunRequest testRunRequest) {
 		try {
 			String inputFile = testRunRequest.getGeneratedFile();
-			int indexOfUnderScore = inputFile.lastIndexOf(WTEConstants.UNDERSCORE);
+			int indexOfUnderScore = inputFile.lastIndexOf(WTEConstants.TXT_FILE_EXTN);
 			String dummyFtpPath = inputFile.substring(0, indexOfUnderScore) + WTEConstants.UNDERSCORE + "ftp"
 					+ inputFile.substring(indexOfUnderScore);
 			File sourceFile = new File(inputFile);

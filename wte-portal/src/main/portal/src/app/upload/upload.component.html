@@ -1,43 +1,46 @@
-<app-home></app-home>
-<p>upload works!</p>
-
-
 <form class="form-horizontal" [formGroup]="uploadForm">
-	<div style="padding-top: 10px">
-		<label>Test Case Name</label> <input type="text"
-			formControlName="testCase" />
-	</div>
-	<div style="padding-top: 10px">
-		<label>Template Name</label> <select formControlName="template"
-			name="template">
-			<option selected="" value="">Select One</option>
-			<option [ngValue]="templt._key" *ngFor="let templt of templateList">
-				{{templt._key}}</option>
-		</select>
+	<table>
+		<tr>
+			<td>Test Case Name</td>
+			<td><input type="text" formControlName="testCase" /></td>
+		</tr>
 
-	</div>
+		<tr>
+			<td>Template Name</td>
+			<td><select formControlName="template" name="template">
+					<option selected="" value="">Select One</option>
+					<option [ngValue]="template._key" *ngFor="let template of templateList">
+				{{template._key}}</option>
+			</select></td>
+		</tr>
+		<tr>
+			<td>Upload Test File</td>
+			<td><label class="btn btn-default"> <input type="file"
+					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+					(change)="selectFile($event)">
+			</label></td>
+		</tr>
 
-	<div style="width: 500px">
-		<div *ngIf="currentFileUpload" class="progress">
-			<div class="progress-bar progress-bar-info progress-bar-striped"
-				role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
-				aria-valuemin="0" aria-valuemax="100"
-				[ngStyle]="{width:progress.percentage+'%'}">
-				{{progress.percentage}}%</div>
-		</div>
-	</div>
-	<label class="btn btn-default"> <input type="file"
-		accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-		(change)="selectFile($event)">
-	</label>
+		<tr [hidden]="!currentFileUpload">
+			<td colspan="2"><div style="width: 500px">
+					<div *ngIf="currentFileUpload" class="progress">
+						<div
+							class="progress-bar progress-bar-info progress-bar-striped progress-bar-wte"
+							role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+							aria-valuemin="0" aria-valuemax="100"
+							[ngStyle]="{width:progress.percentage+'%'}">
+							{{progress.percentage}}%</div>
+					</div>
+				</div></td>
+		</tr>
 
-	<!-- 
-<button class="btn btn-success" [disabled]="!selectedFiles"
-	(click)="upload()">Upload</button>
- -->
+		<tr>
+			<td colspan="2">
+					<button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>
+				</td>
+		</tr>
 
-	<div style="padding-top: 10px">
-		<button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>
-	</div>
+	</table>
+
 
 </form>

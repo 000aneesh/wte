@@ -1,5 +1,5 @@
 export default {
-  HOME: {
+  MENU: {
     ADMIN: 'ADMIN',
     UPLOAD: 'UPLOAD',
   }

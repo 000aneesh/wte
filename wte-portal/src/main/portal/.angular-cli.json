@@ -9,6 +9,7 @@
       "outDir": "../../../target/portal",
       "assets": [
         "assets",
+		"logo.png",
         "favicon.ico"
       ],
       "index": "index.html",
