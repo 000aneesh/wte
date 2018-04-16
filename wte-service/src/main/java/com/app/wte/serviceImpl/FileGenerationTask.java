@@ -18,34 +18,37 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.app.wte.model.TestRunRequest;
-import com.app.wte.service.Task;
-
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.Version;
 
+import com.app.wte.model.TestResult;
+import com.app.wte.model.TestRunRequest;
+import com.app.wte.service.Task;
+
 @Service(value="fileGenerationTask")
 public class FileGenerationTask implements Task {
+	
+	@Value("${tempLocation}")
+	private String tempLocation;
 	
 	@Value("${templatePath}")
 	private String templatePath;
 	
-	private String outputFile;
+	@Value("${destFile}")
+	private String destFile;
+	
 
 	@Override
-	public void execute(TestRunRequest testRunRequest) {
-		
-		this.outputFile = testRunRequest.getGeneratedFile();
-		
+	public void execute(TestResult testResult) {
 		FileInputStream excelFile;
 		XSSFRow row;
 		XSSFCell cell;
 		XSSFCell cellVal;
 		Map<String, Object> parameterMap = new HashMap<String, Object>();
 		try {
-			excelFile = new FileInputStream(new File(testRunRequest.getInputFile()));
+			excelFile = new FileInputStream(new File(tempLocation+ File.separator +testResult.getFileName()));
 		
 			XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
 			XSSFSheet sheet = workbook.getSheetAt(0);
@@ -118,11 +121,16 @@ public class FileGenerationTask implements Task {
 			if (excelFile != null) {
 				excelFile.close();
 			}
+//			testResult.addTaskStatusMap("FileGenerationTask","Success");
+			
+			testResult.getTaskSatusMap().put("FileGenerationTask","Success");
 			
 		} catch (FileNotFoundException e) {
+			testResult.getTaskSatusMap().put("FileGenerationTask","Failure");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			testResult.getTaskSatusMap().put("FileGenerationTask","Failure");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -140,7 +148,7 @@ public class FileGenerationTask implements Task {
 		//Writer inboundText = new StringWriter();		
 		
 		try {
-			file = new FileWriter (this.outputFile, true);
+			file = new FileWriter (destFile,true);
 			bw = new BufferedWriter(file); 
 			pw = new PrintWriter(bw);
 			cfg.setDirectoryForTemplateLoading(new File(templatePath));

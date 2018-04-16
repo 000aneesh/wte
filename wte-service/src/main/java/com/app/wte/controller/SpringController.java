@@ -63,9 +63,7 @@ public class SpringController {
 	@Qualifier("fTPTransferTask")
 	Task fTPTransferTask;
 
-	@Autowired
-	@Qualifier("fileUploadTask")
-	Task fileUploadTask;
+
 
 //	@Value("${tempLocation}")
 //	private String tempLocation;
@@ -134,7 +132,7 @@ public class SpringController {
 				.body(file);
 	}
 
-	@RequestMapping(value = "/testRun")
+/*	@RequestMapping(value = "/testRun")
 	public String getMessage(@RequestBody TestRunRequest testRunRequest) {
 		String outputFile = WTEUtils.geTempPath().toString() + File.separator + testRunRequest.getTestCase()
 				+ WTEConstants.UNDERSCORE + WTEUtils.getMilliSecTimeStamp() + WTEConstants.TXT_FILE_EXTN;
@@ -146,7 +144,7 @@ public class SpringController {
 		fTPTransferTask.execute(testRunRequest);
 
 		return "success";
-	}
+	}*/
 
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
 	@ResponseBody

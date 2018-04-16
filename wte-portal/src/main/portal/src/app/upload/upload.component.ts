@@ -126,8 +126,9 @@ export class UploadComponent implements OnInit, OnDestroy {
 
           const testRunRequest: TestRunRequest = new TestRunRequest;
           testRunRequest.inputFile = respObj.filePath;
-          testRunRequest.template = this.uploadForm.value.template;
+          testRunRequest.templateKey = this.uploadForm.value.template;
           testRunRequest.testCase = this.uploadForm.value.testCase;
+          testRunRequest.fileName = "TestData-Upload.xlsx";
 
           this.initTestRun(testRunRequest);
 
