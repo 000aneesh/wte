@@ -2,23 +2,40 @@ package com.app.wte.model;
 
 public class FileUploadResponse {
 
-	private String filePath;
+	private String fileName;
+
+	private String fileLocation;
 
 	private String status;
 
 	/**
-	 * @return the filePath
+	 * @return the fileName
 	 */
-	public String getFilePath() {
-		return filePath;
+	public String getFileName() {
+		return fileName;
 	}
 
 	/**
-	 * @param filePath
-	 *            the filePath to set
+	 * @param fileName
+	 *            the fileName to set
 	 */
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	/**
+	 * @return the fileLocation
+	 */
+	public String getFileLocation() {
+		return fileLocation;
+	}
+
+	/**
+	 * @param fileLocation
+	 *            the fileLocation to set
+	 */
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
 	}
 
 	/**

@@ -4,14 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.CommandLineRunner;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.app.wte.model.TestResult;
-import com.app.wte.model.TestRunRequest;
 import com.app.wte.service.Task;
 
 public abstract class TestSuite implements Runnable {
@@ -26,7 +20,6 @@ public abstract class TestSuite implements Runnable {
 
 	TestResult testResult;
 
-	
 	private static final Logger logger = LoggerFactory.getLogger(TestSuite.class);
 
 	public abstract void executeTest(TestResult testResult);

@@ -29,7 +29,7 @@ export class UploadComponent implements OnInit, OnDestroy {
   continueProcessing = false;
   uploadForm: FormGroup;
   destroy$: Subject<boolean>;
-
+  downloadLink: string;
   templateList: Array<any>;
   template: string;
   constructor(private uploadService: UploadService, private builder: FormBuilder) {
@@ -125,10 +125,12 @@ export class UploadComponent implements OnInit, OnDestroy {
           const respObj = JSON.parse(event.body);
 
           const testRunRequest: TestRunRequest = new TestRunRequest;
-          testRunRequest.inputFile = respObj.filePath;
+          testRunRequest.fileName = respObj.fileName;
+          testRunRequest.fileLocation = respObj.fileLocation;
           testRunRequest.templateKey = this.uploadForm.value.template;
           testRunRequest.testCase = this.uploadForm.value.testCase;
-          testRunRequest.fileName = "TestData-Upload.xlsx";
+
+          this.downloadLink = '/files/'+testRunRequest.fileLocation + '/test_input.txt';
 
           this.initTestRun(testRunRequest);
 

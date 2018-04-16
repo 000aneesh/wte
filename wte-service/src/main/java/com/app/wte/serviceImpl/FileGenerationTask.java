@@ -15,29 +15,22 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.app.wte.constants.WTEConstants;
+import com.app.wte.model.TestResult;
+import com.app.wte.service.Task;
+import com.app.wte.util.WTEUtils;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.Version;
 
-import com.app.wte.model.TestResult;
-import com.app.wte.model.TestRunRequest;
-import com.app.wte.service.Task;
-
 @Service(value="fileGenerationTask")
 public class FileGenerationTask implements Task {
 	
-	@Value("${tempLocation}")
-	private String tempLocation;
-	
-	@Value("${templatePath}")
-	private String templatePath;
-	
-	@Value("${destFile}")
-	private String destFile;
+	private String outputFile;
 	
 
 	@Override
@@ -46,9 +39,11 @@ public class FileGenerationTask implements Task {
 		XSSFRow row;
 		XSSFCell cell;
 		XSSFCell cellVal;
+		String uploadPath = WTEUtils.getUploadPath();
 		Map<String, Object> parameterMap = new HashMap<String, Object>();
+		this.outputFile = uploadPath + testResult.getFileLocation() + File.separator + WTEConstants.TEST_INPUT_FILE;
 		try {
-			excelFile = new FileInputStream(new File(tempLocation+ File.separator +testResult.getFileName()));
+			excelFile = new FileInputStream(new File(uploadPath + testResult.getFileLocation() + File.separator + testResult.getFileName()));
 		
 			XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
 			XSSFSheet sheet = workbook.getSheetAt(0);
@@ -142,17 +137,19 @@ public class FileGenerationTask implements Task {
 		PrintWriter pw = null;
 		Configuration cfg = new Configuration();
 		cfg.setIncompatibleImprovements(new Version(2, 3, 20));
+		String templatePath = WTEUtils.BASE_PATH + WTEConstants.EXT_PROPERTY_FOLDER;
+		String templateName = "fields.txt";
 	    //cfg.setDefaultEncoding("UTF-8");
 	    //cfg.setLocale(Locale.US);
 	    //cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 		//Writer inboundText = new StringWriter();		
 		
 		try {
-			file = new FileWriter (destFile,true);
+			file = new FileWriter (this.outputFile, true);
 			bw = new BufferedWriter(file); 
 			pw = new PrintWriter(bw);
 			cfg.setDirectoryForTemplateLoading(new File(templatePath));
-			Template template = cfg.getTemplate("fields.txt");
+			Template template = cfg.getTemplate(templateName);
 			template.process(parameterMap, file);
 			pw.println("");
 		} catch (IOException | TemplateException e) {

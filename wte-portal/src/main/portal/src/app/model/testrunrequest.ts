@@ -1,8 +1,8 @@
 export class TestRunRequest {
   testCase: string;
-  inputFile: string;
-  generatedFile: string;
+  fileName: string;
+  fileLocation: string;
   templateKey: string;
-  fileName:string;
+  taskSatusMap : any;
   
 }

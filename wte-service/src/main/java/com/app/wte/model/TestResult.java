@@ -8,6 +8,8 @@ public class TestResult {
 	
 	String fileName;
 	
+	String fileLocation;
+	
 	String templateKey;
 	
 	HashMap<String,String> taskSatusMap = new HashMap<String, String>();
@@ -27,6 +29,14 @@ public class TestResult {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getFileLocation() {
+		return fileLocation;
+	}
+
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
 	}
 
 	public String getTemplateKey() {
