@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import com.app.wte.model.DummyResponse;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -24,6 +26,9 @@ public class PollController {
 	private static final Object TIMEOUT_RESULT = null;
 	@Autowired
 	BroadcastCounter broadcastCounter;
+	
+	@Autowired
+	DummyBroadcastCounter dummyBroadcastCounter;
 
 	int i = 0;
 	
@@ -57,6 +62,15 @@ public class PollController {
 		Thread.sleep(3000);
 		System.out.println("after sleep the pollBroadcastFuture()");
 	  return CompletableFuture.supplyAsync(() -> "{ \"data\" : "+ i  +"}");
+	}
+	
+	@GetMapping(path = "/dummyStatus")
+	public DeferredResult<DummyResponse> ajaxDummyResponse(final HttpServletRequest request, final HttpServletResponse response,
+			ModelMap mm) throws Exception {
+		final DeferredResult<DummyResponse> dr = new DeferredResult<DummyResponse>(TimeUnit.MINUTES.toMillis(1), TIMEOUT_RESULT);
+		dummyBroadcastCounter.addSubscribed(dr);
+		System.out.println("Result: " + dr.getResult());
+		return dr;
 	}
 
 }

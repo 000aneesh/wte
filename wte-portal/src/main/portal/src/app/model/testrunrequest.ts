@@ -1,7 +1,7 @@
 export class TestRunRequest {
   testCase: string;
   fileName: string;
-  fileLocation: string;
+  resultFolderName: string;
   templateKey: string;
   taskSatusMap : any;
   

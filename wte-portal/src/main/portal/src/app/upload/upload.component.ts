@@ -26,6 +26,7 @@ export class UploadComponent implements OnInit, OnDestroy {
   inputMsg = '';
   outputMsg = 'initial val';
   i = 0;
+  selectedIndex:number;
   continueProcessing = false;
   uploadForm: FormGroup;
   destroy$: Subject<boolean>;
@@ -47,6 +48,7 @@ export class UploadComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.template = '';
     this.continueProcessing = true;
+    this.selectedIndex = 0;
 
     this.uploadForm = this.builder.group({
       testCase: new FormControl(''),
@@ -54,12 +56,18 @@ export class UploadComponent implements OnInit, OnDestroy {
       file: new FormData()
     });
 
-    this.templateList = [
+  /*  this.templateList = [
       {_key: 'key 1', object: {url: 'testUrl 1', xpath: 'some xpath 1'}},
       {_key: 'key 2', object: {url: 'testUrl 2', xpath: 'some xpath 2'}},
       {_key: 'key 3', object: {url: 'testUrl 3', xpath: 'some xpath 3'}},
       {_key: 'key 4', object: {url: 'testUrl 4', xpath: 'some xpath 4'}}
-    ];
+    ];*/
+    
+    this.uploadService.getTemplates().subscribe(response => {
+          this.templateList = response;
+      },
+      (error) => { 
+      });
   }
 
   longPolling(event) {
@@ -69,6 +77,24 @@ export class UploadComponent implements OnInit, OnDestroy {
       (response) => {
         this.outputMsg = response.data;
         console.log(this.i + ' : ' + this.outputMsg);
+      },
+      (error) => {
+      },
+      () => {
+        console.log('completed: ' + this.continueProcessing);
+        if (this.continueProcessing) {
+          this.longPolling(event);
+        }
+      });
+  }
+  
+    getDummyStatus(event) {
+    console.log('in getDummyStatus');
+    this.uploadService.getDummyStatus()
+      .subscribe(
+      (response) => {
+        //this.outputMsg = response.data;
+        console.log(response.data);
       },
       (error) => {
       },
@@ -116,21 +142,21 @@ export class UploadComponent implements OnInit, OnDestroy {
       this.currentFileUpload = this.selectedFiles.item(0);
       this.uploadForm.value.file = this.selectedFiles.item(0);
 
-
+this.selectedIndex = 1;
+this.downloadLink = undefined;
       this.uploadService.uploadFile(this.currentFileUpload).subscribe(event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.progress.percentage = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
-          console.log('File is completely uploaded!');
           const respObj = JSON.parse(event.body);
 
           const testRunRequest: TestRunRequest = new TestRunRequest;
           testRunRequest.fileName = respObj.fileName;
-          testRunRequest.fileLocation = respObj.fileLocation;
+          testRunRequest.resultFolderName = respObj.fileLocation;
           testRunRequest.templateKey = this.uploadForm.value.template;
           testRunRequest.testCase = this.uploadForm.value.testCase;
 
-          this.downloadLink = '/files/'+testRunRequest.fileLocation + '/test_input.txt';
+          this.downloadLink = '/files/'+ respObj.fileLocation + '/output_file.txt';
 
           this.initTestRun(testRunRequest);
 

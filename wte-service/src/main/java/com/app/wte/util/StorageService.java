@@ -9,12 +9,11 @@ import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.app.wte.constants.WTEConstants;
 
 @Component
 public class StorageService {
@@ -23,16 +22,13 @@ public class StorageService {
 
 	Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
-	// @Autowired
-	// public StorageService(@Value("${tempLocation}") String uploadDir) {
-	// rootLocation = Paths.get(uploadDir);
-	// }
+	@Value("${upload-path}")
+	private String uploadPath;
 
 	public String store(MultipartFile file) {
-		String uploadPath = WTEUtils.getUploadPath();
-		long uniqueTimeStamp = WTEUtils.getUniqueTimeStamp();
-		Path fileLocation = Paths.get(uploadPath + uniqueTimeStamp);
+		String uniqueTimeStamp = WTEUtils.getUniqueTimeStamp();
 		try {
+			Path fileLocation = Paths.get(uploadPath + File.separator + uniqueTimeStamp);
 
 			if (!Files.exists(fileLocation)) {
 				try {
@@ -45,15 +41,15 @@ public class StorageService {
 			Path path = fileLocation.resolve(file.getOriginalFilename());
 			Files.copy(file.getInputStream(), path);
 			//String filePath = path.toString();
-			return String.valueOf(uniqueTimeStamp);
+			return uniqueTimeStamp;
 		} catch (Exception e) {
 			throw new RuntimeException("FAIL!");
 		}
 	}
 
-	public Resource loadFile(String filePath) {
+	public Resource loadFile(String filePath) throws IOException {
 		try {
-			Path file = Paths.get(WTEUtils.getUploadPath() + filePath);
+			Path file = Paths.get(uploadPath + File.separator + filePath);
 			Resource resource = new UrlResource(file.toUri());
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
@@ -70,10 +66,11 @@ public class StorageService {
 	// }
 
 	public void init() {
-		Path extPropertiesLocation = Paths.get(WTEUtils.BASE_PATH + WTEConstants.EXT_PROPERTY_FOLDER + File.separator + WTEConstants.EXT_PROPERTY_FILE);
-		if (!Files.exists(extPropertiesLocation)) {
-			throw new RuntimeException("wte.properties not found in specified location !");
-		}
+//		Path extPropertiesLocation = Paths.get(WTEUtils.BASE_PATH + WTEConstants.EXT_PROPERTY_FOLDER + File.separator + WTEConstants.EXT_PROPERTY_FILE);
+//		if (!Files.exists(extPropertiesLocation)) {
+//			throw new RuntimeException("*************wte.properties not found in specified location !**************");
+//		}
+		
 //		if (!Files.exists(tempLocation)) {
 //			try {
 //				Files.createDirectories(tempLocation);

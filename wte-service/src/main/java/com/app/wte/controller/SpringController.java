@@ -6,7 +6,6 @@ package com.app.wte.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import com.app.wte.model.CsvDTO;
 import com.app.wte.model.FileUploadResponse;
 import com.app.wte.service.Task;
 import com.app.wte.util.StorageService;
@@ -44,9 +42,6 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 public class SpringController {
 
-	// @Value("${excel.file.path}")
-	private String excelPath;
-
 	@Autowired
 	@Qualifier("fileGenerationTask")
 	Task fileGenerationTask;
@@ -55,8 +50,8 @@ public class SpringController {
 	@Qualifier("fTPTransferTask")
 	Task fTPTransferTask;
 
-//	@Value("${tempLocation}")
-//	private String tempLocation;
+	@Autowired
+	ConfigurationComponent confComponent;
 
 	@Autowired
 	StorageService storageService;
@@ -72,11 +67,11 @@ public class SpringController {
 		return "Hello " + msg;
 	}
 
-	@GetMapping(path = "/getTemplateDetails")
-	public ResponseEntity<List<CsvDTO>> templateDeatils(@RequestParam("msg") String msg)
+	@GetMapping(path = "/getTemplates")
+	public ResponseEntity<List<String>> templateDeatils()
 			throws InvalidFormatException, IllegalStateException, IOException {
 
-		List<CsvDTO> list = ExcelToObject.excelReader(excelPath);
+		List<String> list = confComponent.getTemplates();
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
@@ -84,7 +79,7 @@ public class SpringController {
 	public ResponseEntity<FileUploadResponse> handleFileUpload(@RequestParam("file") MultipartFile file)
 			throws URISyntaxException, IOException {
 		String message = "";
-		
+
 		FileUploadResponse fileUploadResponse = new FileUploadResponse();
 		try {
 			String fileLocation = storageService.store(file);
@@ -104,7 +99,7 @@ public class SpringController {
 		}
 	}
 
-	@GetMapping("/getallfiles")
+	@GetMapping("/getAllFiles")
 	public ResponseEntity<List<String>> getListFiles(Model model) {
 		List<String> fileNames = files
 				.stream().map(fileName -> MvcUriComponentsBuilder
@@ -116,7 +111,9 @@ public class SpringController {
 
 	@GetMapping("/files/{filePath}/{fileName:.+}")
 	@ResponseBody
-	public ResponseEntity<Resource> getFile(@PathVariable String filePath, @PathVariable String fileName) {
+	public ResponseEntity<Resource> getFile(@PathVariable String filePath, @PathVariable String fileName)
+			throws IOException {
+		System.out.println("file : " + filePath + File.separator + fileName);
 		Resource file = storageService.loadFile(filePath + File.separator + fileName);
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")

@@ -1,4 +1,6 @@
 <form class="form-horizontal" [formGroup]="uploadForm">
+	<mat-tab-group [(selectedIndex)]="selectedIndex"> 
+	<mat-tab label="Tab 1">
 	<table>
 		<tr>
 			<td>Test Case Name</td>
@@ -9,8 +11,8 @@
 			<td>Template Name</td>
 			<td><select formControlName="template" name="template">
 					<option selected="" value="">Select One</option>
-					<option [ngValue]="template._key" *ngFor="let template of templateList">
-				{{template._key}}</option>
+					<option [ngValue]="template"
+						*ngFor="let template of templateList">{{template}}</option>
 			</select></td>
 		</tr>
 		<tr>
@@ -21,7 +23,7 @@
 			</label></td>
 		</tr>
 
-		<tr [hidden]="!currentFileUpload">
+	<!-- 	<tr [hidden]="!currentFileUpload">
 			<td colspan="2"><div style="width: 500px">
 					<div *ngIf="currentFileUpload" class="progress">
 						<div
@@ -33,19 +35,42 @@
 					</div>
 				</div></td>
 		</tr>
-
+ -->
 		<tr>
 			<td colspan="2">
-					<button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>
-				</td>
+				<button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>
+			</td>
 		</tr>
 
-<a *ngIf="downloadLink" href = '{{downloadLink}}'>Download file</a>
 	</table>
 
-<mat-tab-group>
-  <mat-tab label="Tab 1">Content 11111</mat-tab>
-  <mat-tab label="Tab 2">Content 22222</mat-tab>
-</mat-tab-group>
-
+	</mat-tab> 
+	 
+		
+		<mat-tab label="Tab 2"> 
+	<table>
+	<tr [hidden]="!currentFileUpload">
+			<td colspan="2"><div style="width: 500px"> 
+					<div *ngIf="currentFileUpload" class="progress">
+						<div
+							class="progress-bar progress-bar-info progress-bar-striped progress-bar-wte"
+							role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+							aria-valuemin="0" aria-valuemax="100"
+							[ngStyle]="{width:progress.percentage+'%'}">
+							{{progress.percentage}}%</div>
+					</div>
+				</div>
+				
+				</td>
+		</tr>
+		<tr>
+		<td>
+			<a *ngIf="downloadLink"
+		href='{{downloadLink}}'>Download file</a>
+		</td>
+		</tr>
+	</table>
+	</mat-tab>
+		</mat-tab-group>
+		
 </form>

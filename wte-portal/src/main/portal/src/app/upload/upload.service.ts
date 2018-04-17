@@ -92,4 +92,21 @@ export class UploadService {
     });
     return this.http.request(req);
   }
+  
+    getTemplates(): Observable<any> {
+    return this.http.get('/getTemplates');
+  }
+  
+    getDummyStatus() {
+    return this._http.get('/dummyStatus')
+      .map((response: Response) => {
+        if (response.status < 200 || response.status >= 300) {
+          throw new Error('This request has failed ' + response.status);
+        } else {
+          return response.json();
+        }
+      })
+      .catch(this._errorHandler);
+  }
+  
 }

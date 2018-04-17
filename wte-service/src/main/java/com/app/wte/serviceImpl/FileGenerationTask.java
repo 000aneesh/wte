@@ -15,35 +15,40 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.app.wte.constants.WTEConstants;
-import com.app.wte.model.TestResult;
-import com.app.wte.service.Task;
-import com.app.wte.util.WTEUtils;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.Version;
 
+import com.app.wte.model.TestResult;
+import com.app.wte.service.Task;
+import com.app.wte.util.WTEUtils;
+
 @Service(value="fileGenerationTask")
 public class FileGenerationTask implements Task {
 	
-	private String outputFile;
+	@Value("${upload-path}")
+	private String uploadPath;
 	
-
+	@Value("${templatePath}")
+	private String templatePath;
+	
+//	@Autowired
+//	WTEUtils wTEUtils;
+	
 	@Override
 	public void execute(TestResult testResult) {
 		FileInputStream excelFile;
 		XSSFRow row;
 		XSSFCell cell;
 		XSSFCell cellVal;
-		String uploadPath = WTEUtils.getUploadPath();
 		Map<String, Object> parameterMap = new HashMap<String, Object>();
-		this.outputFile = uploadPath + testResult.getFileLocation() + File.separator + WTEConstants.TEST_INPUT_FILE;
 		try {
-			excelFile = new FileInputStream(new File(uploadPath + testResult.getFileLocation() + File.separator + testResult.getFileName()));
+			excelFile = new FileInputStream(new File(testResult.getResultFolderName()+File.separator+testResult.getFileName()));
 		
 			XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
 			XSSFSheet sheet = workbook.getSheetAt(0);
@@ -106,7 +111,7 @@ public class FileGenerationTask implements Task {
 						
 					}
 					if(!parameterMap.isEmpty()){
-						templateProcess(parameterMap);						
+						templateProcess(parameterMap,testResult);						
 					}
 				}
 				
@@ -116,40 +121,39 @@ public class FileGenerationTask implements Task {
 			if (excelFile != null) {
 				excelFile.close();
 			}
-//			testResult.addTaskStatusMap("FileGenerationTask","Success");
 			
-			testResult.getTaskSatusMap().put("FileGenerationTask","Success");
+			
+			testResult.getTaskSatusMap().put("FileGenerationTask","Failure");
+			WTEUtils.jaxbObjectToXML(testResult, "");
 			
 		} catch (FileNotFoundException e) {
 			testResult.getTaskSatusMap().put("FileGenerationTask","Failure");
-			// TODO Auto-generated catch block
+			WTEUtils.jaxbObjectToXML(testResult, "");
 			e.printStackTrace();
 		} catch (IOException e) {
 			testResult.getTaskSatusMap().put("FileGenerationTask","Failure");
-			// TODO Auto-generated catch block
+			WTEUtils.jaxbObjectToXML(testResult, "");
 			e.printStackTrace();
 		}
 		
 	}
-	private void templateProcess(Map<String, Object> parameterMap) {
+	private void templateProcess(Map<String, Object> parameterMap,TestResult testResult) {
 		Writer file = null;
 		BufferedWriter bw = null;
 		PrintWriter pw = null;
 		Configuration cfg = new Configuration();
 		cfg.setIncompatibleImprovements(new Version(2, 3, 20));
-		String templatePath = WTEUtils.BASE_PATH + WTEConstants.EXT_PROPERTY_FOLDER;
-		String templateName = "fields.txt";
 	    //cfg.setDefaultEncoding("UTF-8");
 	    //cfg.setLocale(Locale.US);
 	    //cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 		//Writer inboundText = new StringWriter();		
 		
 		try {
-			file = new FileWriter (this.outputFile, true);
+			file = new FileWriter (testResult.getResultFolderName()+File.separator+"output_file.txt",true);
 			bw = new BufferedWriter(file); 
 			pw = new PrintWriter(bw);
 			cfg.setDirectoryForTemplateLoading(new File(templatePath));
-			Template template = cfg.getTemplate(templateName);
+			Template template = cfg.getTemplate("fields.txt");
 			template.process(parameterMap, file);
 			pw.println("");
 		} catch (IOException | TemplateException e) {

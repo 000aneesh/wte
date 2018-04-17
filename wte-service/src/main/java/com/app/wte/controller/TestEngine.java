@@ -1,11 +1,13 @@
 package com.app.wte.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.TaskExecutor;
@@ -20,6 +22,10 @@ import com.app.wte.testengine.TestSuite;
 @RestController
 public class TestEngine {
 	private static final Logger logger = LoggerFactory.getLogger(TestEngine.class);
+	
+	@Value("${upload-path}")
+	private String uploadPath;
+	
 	@Autowired
 	private TaskExecutor taskExecutor;
 
@@ -34,6 +40,7 @@ public class TestEngine {
 	}
 
 	public void startTestSuite(TestResult testResult) {
+		testResult.setResultFolderName(uploadPath + File.separator + testResult.getResultFolderName());
 		System.out.println("entry to test engine");
 		logger.info("entry to test engine");
 		TestSuite myThread = applicationContext.getBean(TestSuite.class);
