@@ -65,11 +65,9 @@ public class PollController {
 	}
 	
 	@GetMapping(path = "/dummyStatus")
-	public DeferredResult<DummyResponse> ajaxDummyResponse(final HttpServletRequest request, final HttpServletResponse response,
-			ModelMap mm) throws Exception {
+	public DeferredResult<DummyResponse> ajaxDummyResponse(@RequestParam(name="init") boolean init) throws Exception {
 		final DeferredResult<DummyResponse> dr = new DeferredResult<DummyResponse>(TimeUnit.MINUTES.toMillis(1), TIMEOUT_RESULT);
-		dummyBroadcastCounter.addSubscribed(dr);
-		System.out.println("Result: " + dr.getResult());
+		dummyBroadcastCounter.addSubscribed(dr, init);
 		return dr;
 	}
 

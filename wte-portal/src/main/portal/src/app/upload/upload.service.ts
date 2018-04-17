@@ -92,13 +92,13 @@ export class UploadService {
     });
     return this.http.request(req);
   }
-  
-    getTemplates(): Observable<any> {
+
+  getTemplates(): Observable<any> {
     return this.http.get('/getTemplates');
   }
-  
-    getDummyStatus() {
-    return this._http.get('/dummyStatus')
+
+  getDummyStatus(init) {
+    return this._http.get('/dummyStatus?init=' + init)
       .map((response: Response) => {
         if (response.status < 200 || response.status >= 300) {
           throw new Error('This request has failed ' + response.status);
@@ -108,5 +108,5 @@ export class UploadService {
       })
       .catch(this._errorHandler);
   }
-  
+
 }

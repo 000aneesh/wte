@@ -10,7 +10,9 @@
       "assets": [
         "assets",
 		"logo.png",
-        "favicon.ico"
+        "favicon.ico",
+        "success.svg",
+        "error.svg"
       ],
       "index": "index.html",
       "main": "main.ts",

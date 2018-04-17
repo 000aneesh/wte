@@ -16,20 +16,19 @@ public class DummyBroadcastCounter {
 	// private AtomicLong counter = new AtomicLong();
 	private List<DeferredResult<DummyResponse>> subscribedClient = Collections
 			.synchronizedList(new ArrayList<DeferredResult<DummyResponse>>());
-
+	int index;
 	public DummyBroadcastCounter() {
 		t = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while (true) {
-					int index = -1;
+					
 					// counter.incrementAndGet();
 					// if (counter.get() > Long.MAX_VALUE - 100) {
 					// counter.set(0);
 					// }
 					try {
 						Thread.sleep(10000);
-						index ++;
 					} catch (InterruptedException e) {
 
 					}
@@ -37,9 +36,7 @@ public class DummyBroadcastCounter {
 						Iterator<DeferredResult<DummyResponse>> it = subscribedClient.iterator();
 						while (it.hasNext()) {
 							DeferredResult<DummyResponse> dr = it.next();
-							if(index < 5) {
-								dr.setResult(getDummyRespList().get(index));								
-							}
+							dr.setResult(getDummyRespList().get(index));
 							it.remove();
 						}
 					}
@@ -51,7 +48,11 @@ public class DummyBroadcastCounter {
 		t.start();
 	}
 
-	public void addSubscribed(DeferredResult<DummyResponse> client) {
+	public void addSubscribed(DeferredResult<DummyResponse> client, boolean init) {
+		if(init) {
+			index = -1;
+		}
+		index++;
 		synchronized (subscribedClient) {
 			subscribedClient.add(client);
 		}
@@ -60,7 +61,12 @@ public class DummyBroadcastCounter {
 	private List<DummyResponse> getDummyRespList(){
 		List<DummyResponse> respList = new ArrayList<DummyResponse>();
 		DummyResponse dummyResp = new DummyResponse();
-		dummyResp.setProcess("fileGenerated");
+		dummyResp.setProcess("fileUpload");
+		dummyResp.setStatus("success");
+		respList.add(dummyResp);
+		
+		dummyResp = new DummyResponse();
+		dummyResp.setProcess("fileGeneration");
 		dummyResp.setStatus("success");
 		respList.add(dummyResp);
 		
