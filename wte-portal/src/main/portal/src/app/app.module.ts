@@ -3,14 +3,16 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Http, HttpModule} from '@angular/http';
 import {RouterModule, Routes} from '@angular/router';
+import { Ng2TableModule } from 'ng2-table/ng2-table';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app.routing.module';
 import {RoutingComponents} from './app.routing.module';
 import {HttpClientModule} from '@angular/common/http';
 
-import {MaterialModule} from './material.module';
-
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome'
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
@@ -26,8 +28,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    MaterialModule,
-    BrowserAnimationsModule
+    TabsModule.forRoot(),
+    ProgressbarModule.forRoot(),
+    Angular2FontawesomeModule,
+    BrowserAnimationsModule,
+    Ng2TableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

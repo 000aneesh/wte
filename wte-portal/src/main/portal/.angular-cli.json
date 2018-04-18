@@ -10,9 +10,7 @@
       "assets": [
         "assets",
 		"logo.png",
-        "favicon.ico",
-        "success.svg",
-        "error.svg"
+        "favicon.ico"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -23,6 +21,7 @@
       "prefix": "app",
       "styles": [
 		"../node_modules/bootstrap/dist/css/bootstrap.min.css",
+		"../node_modules/font-awesome/css/font-awesome.css",
         "styles.css"
       ],
       "scripts": [],

@@ -1,7 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
-
 body {
 	background-color: #399eef;
 	color: white;
@@ -30,4 +28,16 @@ a {
 
 .btn {
 	padding: 0px !important;
+}
+
+.fa-check {
+  color: green;
+}
+
+.fa-close {
+  color: red;
+}
+
+.fa-download {
+  color: olive;
 }

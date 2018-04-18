@@ -1,6 +1,6 @@
 <form class="form-horizontal" [formGroup]="uploadForm">
-	<mat-tab-group [(selectedIndex)]="selectedIndex"> <mat-tab
-		label="Tab 1">
+	<tabset type="pills" #uploadTabs> 
+	<tab heading="Tab 1" id="tab1">
 	<table>
 		<tr>
 			<td>Test Case Name</td>
@@ -39,57 +39,41 @@
 			<td colspan="2">
 				<!-- <button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>  -->
 				<button type="button" name="submitBtn"
-					(click)="getDummyStatus(event, true);">Submit</button>
+					(click)="onSubmit();">Submit</button>
 			</td>
 		</tr>
 
 	</table>
 
-	</mat-tab> <mat-tab label="Tab 2">
+
+	</tab> <tab heading="Basic title 2" id="tab2" disabled=true>
 	<table>
 		<tr>
 			<th>Process</th>
-			<th>Status</th>
+			<th style="width: 500px">Status</th>
 		</tr>
 		<tr>
 			<td>File Upload</td>
-			<td><mat-icon
-					*ngIf="processStatus && processStatus.fileUpload == 'success'">check</mat-icon>
-				<mat-icon
-					*ngIf="processStatus && processStatus.fileUpload == 'error'">error</mat-icon>
-				<div style="width: 500px">
-					<div *ngIf="processStatus && processStatus.fileUpload == ''"
-						class="progress">
-						<div
-							class="progress-bar progress-bar-info progress-bar-striped progress-bar-wte"
-							role="progressbar"
-							attr.aria-valuenow="{{processProgress.fileUpload}}"
-							aria-valuemin="0" aria-valuemax="100"
-							[ngStyle]="{width:processProgress.fileUpload+'%'}">
-							{{processProgress.fileUpload}}%</div>
-					</div>
-				</div></td>
+			<td>
+			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.fileUpload == 'success'"></fa>
+			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.fileUpload == 'error'"></fa>
+			<div *ngIf="processStatus && processStatus.fileUpload == ''">
+				<progressbar max="100" [value]="processProgress.fileUpload" type="success" [striped]="true" 
+					[animate]="true"><i>{{processProgress.fileUpload}}%</i></progressbar>
+			</div>
+			</td>
 		</tr>
 
 		<tr>
 			<td>File Generation</td>
-			<td><mat-icon
-					*ngIf="processStatus && processStatus.fileGeneration == 'success'">check</mat-icon>
-				<mat-icon
-					*ngIf="processStatus && processStatus.fileGeneration == 'error'">error</mat-icon>
-					<a *ngIf="processStatus && processStatus.fileGeneration == 'success'" href='#'>Download file</a>
-				<div style="width: 500px">
-					<div *ngIf="processStatus && processStatus.fileGeneration == ''"
-						class="progress">
-						<div
-							class="progress-bar progress-bar-info progress-bar-striped progress-bar-wte"
-							role="progressbar"
-							attr.aria-valuenow="{{processProgress.fileGeneration}}"
-							aria-valuemin="0" aria-valuemax="100"
-							[ngStyle]="{width:processProgress.fileGeneration+'%'}">
-							{{processProgress.fileGeneration}}%</div>
-					</div>
-				</div> 
+			<td>
+			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.fileGeneration == 'success'"></fa>
+			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.fileGeneration == 'error'"></fa>
+			<a title="Download" *ngIf="processStatus && processStatus.fileGeneration == 'success'" href='{{downloadLink}}'><fa [name]="'download'" [size]=1></fa></a>
+			<div *ngIf="processStatus && processStatus.fileGeneration == ''">
+				<progressbar max="100" [value]="processProgress.fileGeneration" type="success" [striped]="true" 
+					[animate]="true"><i>{{processProgress.fileGeneration}}%</i></progressbar>
+			</div>
 				</td>
 				<td><!-- <a *ngIf="downloadLink" href='{{downloadLink}}'>Download
 					file</a>  -->
@@ -99,84 +83,54 @@
 
 		<tr>
 			<td>File Copy</td>
-			<td><mat-icon
-					*ngIf="processStatus && processStatus.fileCopy == 'success'">check</mat-icon>
-				<mat-icon *ngIf="processStatus && processStatus.fileCopy == 'error'">error</mat-icon>
-				<div style="width: 500px">
-					<div *ngIf="processStatus && processStatus.fileCopy == ''"
-						class="progress">
-						<div
-							class="progress-bar progress-bar-info progress-bar-striped progress-bar-wte"
-							role="progressbar"
-							attr.aria-valuenow="{{processProgress.fileCopy}}"
-							aria-valuemin="0" aria-valuemax="100"
-							[ngStyle]="{width:processProgress.fileCopy+'%'}">
-							{{processProgress.fileCopy}}%</div>
-					</div>
-				</div></td>
+			<td>
+			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.fileCopy == 'success'"></fa>
+			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.fileCopy == 'error'"></fa>
+			<div *ngIf="processStatus && processStatus.fileCopy == ''">
+				<progressbar max="100" [value]="processProgress.fileCopy" type="success" [striped]="true" 
+					[animate]="true"><i>{{processProgress.fileCopy}}%</i></progressbar>
+			</div>
+				</td>
 		</tr>
 
 		<tr>
 			<td>Process 1</td>
-			<td><mat-icon
-					*ngIf="processStatus && processStatus.process1 == 'success'">check</mat-icon>
-				<mat-icon *ngIf="processStatus && processStatus.process1 == 'error'">error</mat-icon>
-				<div style="width: 500px">
-					<div *ngIf="processStatus && processStatus.process1 == ''"
-						class="progress">
-						<div
-							class="progress-bar progress-bar-info progress-bar-striped progress-bar-wte"
-							role="progressbar"
-							attr.aria-valuenow="{{processProgress.process1}}"
-							aria-valuemin="0" aria-valuemax="100"
-							[ngStyle]="{width:processProgress.process1+'%'}">
-							{{processProgress.process1}}%</div>
-					</div>
-				</div></td>
+			<td>
+			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.process1 == 'success'"></fa>
+			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.process1 == 'error'"></fa>
+				<div *ngIf="processStatus && processStatus.process1 == ''">
+				<progressbar max="100" [value]="processProgress.process1" type="success" [striped]="true" 
+					[animate]="true"><i>{{processProgress.process1}}%</i></progressbar>
+			</div>
+			</td>
 		</tr>
 
 		<tr>
 			<td>Process 2</td>
-			<td><mat-icon
-					*ngIf="processStatus && processStatus.process2 == 'success'">check</mat-icon>
-				<mat-icon *ngIf="processStatus && processStatus.process2 == 'error'">error</mat-icon>
-				<div style="width: 500px">
-					<div *ngIf="processStatus && processStatus.process2 == ''"
-						class="progress">
-						<div
-							class="progress-bar progress-bar-info progress-bar-striped progress-bar-wte"
-							role="progressbar"
-							attr.aria-valuenow="{{processProgress.process2}}"
-							aria-valuemin="0" aria-valuemax="100"
-							[ngStyle]="{width:processProgress.process2+'%'}">
-							{{processProgress.process2}}%</div>
-					</div>
-				</div></td>
+			<td>
+			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.process2 == 'success'"></fa>
+			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.process2 == 'error'"></fa>				
+				<div *ngIf="processStatus && processStatus.process2 == ''">
+				<progressbar max="100" [value]="processProgress.process2" type="success" [striped]="true" 
+					[animate]="true"><i>{{processProgress.process2}}%</i></progressbar>
+			</div></td>
 		</tr>
 
 		<tr>
 			<td>Process 3</td>
-			<td><mat-icon
-					*ngIf="processStatus && processStatus.process3 == 'success'">check</mat-icon>
-				<mat-icon *ngIf="processStatus && processStatus.process3 == 'error'">error</mat-icon>
-				<div style="width: 500px">
-					<div *ngIf="processStatus && processStatus.process3 == ''"
-						class="progress">
-						<div
-							class="progress-bar progress-bar-info progress-bar-striped progress-bar-wte"
-							role="progressbar"
-							attr.aria-valuenow="{{processProgress.process3}}"
-							aria-valuemin="0" aria-valuemax="100"
-							[ngStyle]="{width:processProgress.process3+'%'}">
-							{{processProgress.process3}}%</div>
-					</div>
-				</div></td>
-		</tr>
-
-		<tr>
-			<td><a *ngIf="downloadLink" href='{{downloadLink}}'>Download
-					file</a></td>
+			<td>
+			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.process3 == 'success'"></fa>
+			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.process3 == 'error'"></fa>
+				<div *ngIf="processStatus && processStatus.process3 == ''">
+				<progressbar max="100" [value]="processProgress.process3" type="success" [striped]="true" 
+					[animate]="true"><i>{{processProgress.process3}}%</i></progressbar>
+			</div>
+			</td>
 		</tr>
 	</table>
-	</mat-tab> </mat-tab-group>
+	</tab> </tabset>
 </form>
+
+					<button type="button"  [routerLink]="['/testSuite']">Test Suite</button>
+					
+					

@@ -48,8 +48,8 @@ public class DummyBroadcastCounter {
 		t.start();
 	}
 
-	public void addSubscribed(DeferredResult<DummyResponse> client, boolean init) {
-		if(init) {
+	public void addSubscribed(DeferredResult<DummyResponse> client, String process) {
+		if(process != null && process.equals("fileGeneration")) {
 			index = -1;
 		}
 		index++;
@@ -60,10 +60,12 @@ public class DummyBroadcastCounter {
 	
 	private List<DummyResponse> getDummyRespList(){
 		List<DummyResponse> respList = new ArrayList<DummyResponse>();
-		DummyResponse dummyResp = new DummyResponse();
+		DummyResponse dummyResp;
+		
+		/*dummyResp = new DummyResponse();
 		dummyResp.setProcess("fileUpload");
 		dummyResp.setStatus("success");
-		respList.add(dummyResp);
+		respList.add(dummyResp);*/
 		
 		dummyResp = new DummyResponse();
 		dummyResp.setProcess("fileGeneration");
