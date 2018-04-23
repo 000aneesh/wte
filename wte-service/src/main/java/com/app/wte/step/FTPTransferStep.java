@@ -24,9 +24,6 @@ public class FTPTransferStep implements TestExecutionStep {
 	private String uploadPath;
 	
 	ExecutionStepType executionTaskType=ExecutionStepType.FTPTransfer;
-	
-	@Autowired
-	WTEUtils wTEUtils;
 
 	@Override
 	public void execute(ExecutionContext executionContext) {
@@ -37,7 +34,7 @@ public class FTPTransferStep implements TestExecutionStep {
 			 Files.copy(sourceFile.toPath(), destFile.toPath());
 			//wTEUtils.copyToServer(executionContext);
 			
-			 wTEUtils.jaxbObjectToXML(executionContext, "");
+			 WTEUtils.jaxbObjectToXML(executionContext, "");
 	         }/* catch (JSchException e) {
 	 			 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.ERROR);
 	 			 wTEUtils.jaxbObjectToXML(executionContext, "");
@@ -49,7 +46,7 @@ public class FTPTransferStep implements TestExecutionStep {
 				e.printStackTrace();
 			}*/ catch (IOException e) {
 				WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.ERROR);
-				 wTEUtils.jaxbObjectToXML(executionContext, "");	
+				WTEUtils.jaxbObjectToXML(executionContext, "");	
 				e.printStackTrace();
 			}	
 		
@@ -62,7 +59,7 @@ public class FTPTransferStep implements TestExecutionStep {
 	public void preprocess(ExecutionContext executionContext) {
 		// TODO 
 		 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.IN_PROGRESS);
-		 wTEUtils.jaxbObjectToXML(executionContext, "");	
+		 WTEUtils.jaxbObjectToXML(executionContext, "");	
 		
 	}
 
@@ -70,7 +67,7 @@ public class FTPTransferStep implements TestExecutionStep {
 	public void postProcess(ExecutionContext executionContext) {
 		if(WTEUtils.getStatus(executionContext, executionTaskType)!=ExecutionStatusType.ERROR){
 			WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.COMPLETED);
-			wTEUtils.jaxbObjectToXML(executionContext, "");	
+			WTEUtils.jaxbObjectToXML(executionContext, "");	
 		}
 		
 	}

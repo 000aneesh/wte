@@ -23,9 +23,6 @@ public class DBValidationStep implements TestExecutionStep {
 	private String ftpFilePath;
 	
 	@Autowired
-	WTEUtils wTEUtils;
-	
-	@Autowired
 	DBValidationDao dBValidationDao;
 	
 	ExecutionStepType executionTaskType=ExecutionStepType.ProcessValidationEdgeToRaw;
@@ -76,7 +73,7 @@ public class DBValidationStep implements TestExecutionStep {
 				//wTEUtils.jaxbObjectToXML(executionContext, "");
 	         } catch (Exception e) {
 	        	 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.ERROR);
-	        	  wTEUtils.jaxbObjectToXML(executionContext, "");
+	        	 WTEUtils.jaxbObjectToXML(executionContext, "");
 	 			 e.printStackTrace();
 			}
 		

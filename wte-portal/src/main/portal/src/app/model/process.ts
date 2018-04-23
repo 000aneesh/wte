@@ -1,10 +1,10 @@
 export class ProcessStatus {
-  fileUpload: String = '';
-  fileGeneration: String = '';
-  fileCopy: String = '';
-  process1: String = '';
-  process2: String = '';
-  process3: String = '';
+//  fileUpload: String = '';
+//  fileGeneration: String = '';
+//  fileCopy: String = '';
+//  process1: String = '';
+//  process2: String = '';
+//  process3: String = '';
 }
 
 export class ProcessProgress {

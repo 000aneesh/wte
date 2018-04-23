@@ -1,5 +1,5 @@
-import {Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import {TestRunRequest} from '../model/testrunrequest';
+import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+//import {TestRunRequest} from '../model/testrunrequest';
 import {ProcessStatus, ProcessProgress, NextProcess} from '../model/process';
 
 import {UploadService} from './upload.service';
@@ -11,7 +11,7 @@ import {HttpClient, HttpResponse, HttpEventType} from '@angular/common/http';
 
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
-import { TabsetComponent } from 'ngx-bootstrap';
+import {TabsetComponent} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-upload',
@@ -21,13 +21,16 @@ import { TabsetComponent } from 'ngx-bootstrap';
 })
 export class UploadComponent implements OnInit, OnDestroy {
 
-@ViewChild('uploadTabs') uploadTabs: TabsetComponent;
+  @ViewChild('uploadTabs') uploadTabs: TabsetComponent;
 
-router:Router;
+  router: Router;
   selectedFiles: FileList;
   currentFileUpload: File;
   progress: {percentage: number} = {percentage: 0};
   processProgress: ProcessProgress;
+  testCase: string;
+  processList: Array<string>;
+  lastProcess: string;
   inputMsg = '';
   outputMsg = 'initial val';
   i = 0;
@@ -55,7 +58,6 @@ router:Router;
 
   }
 
-
   ngOnInit() {
     this.template = '';
     this.continueProcessing = true;
@@ -66,12 +68,9 @@ router:Router;
       file: new FormData()
     });
 
-    /*  this.templateList = [
-        {_key: 'key 1', object: {url: 'testUrl 1', xpath: 'some xpath 1'}},
-        {_key: 'key 2', object: {url: 'testUrl 2', xpath: 'some xpath 2'}},
-        {_key: 'key 3', object: {url: 'testUrl 3', xpath: 'some xpath 3'}},
-        {_key: 'key 4', object: {url: 'testUrl 4', xpath: 'some xpath 4'}}
-  ];*/
+    this.processList = this.uploadService.getProcessList();
+
+    this.lastProcess = this.processList[this.processList.length - 1];
 
     this.uploadService.getTemplates().subscribe(response => {
       this.templateList = response;
@@ -124,7 +123,7 @@ router:Router;
       },
       () => {
         console.log('completed: ' + this.continueProcessing);
-        if (this.completedProcessStatus === 'success' && !this.processStatus.process3) {
+        if (this.completedProcessStatus === 'success' && !this.processStatus && this.processStatus['process3']) {
           this.runningProcess = this.nextProcess[this.completedProcess];
           this.getDummyStatus(event, this.runningProcess);
         }
@@ -156,16 +155,17 @@ router:Router;
       );
   }
 
-initTask(){
-      this.processProgress = new ProcessProgress();
-      this.processStatus = new ProcessStatus();
-      this.runningProcess = this.nextProcess.initialProcess.toString();
-      this.uploadTabs.tabs[1].disabled = false;
-      this.uploadTabs.tabs[1].active = true;
-}
+  initTask() {
+    this.processProgress = new ProcessProgress();
+    this.processStatus = new ProcessStatus();
+    this.runningProcess = this.processList && this.processList.length > 0 ?
+      this.processList[0] : ''; // this.nextProcess.initialProcess.toString();
+    this.uploadTabs.tabs[1].disabled = false;
+    this.uploadTabs.tabs[1].active = true;
+  }
 
   onSubmit() {
-   // this.processProgress.fileUpload = 0;
+    // this.processProgress.fileUpload = 0;
     if (this.uploadForm && this.uploadForm.value && this.uploadForm.value.testCase
       && this.uploadForm.value.template && this.selectedFiles && this.selectedFiles.item(0)) {
 
@@ -173,46 +173,47 @@ initTask(){
       this.currentFileUpload = this.selectedFiles.item(0);
       this.uploadForm.value.file = this.selectedFiles.item(0);
 
-	  this.uploadTabs.tabs[1].disabled = false;
+      this.uploadTabs.tabs[1].disabled = false;
       this.uploadTabs.tabs[1].active = true;
       this.downloadLink = undefined;
-           
+
       this.uploadService.uploadFile(this.currentFileUpload).subscribe(response => {
-      
-     //   if (response.type === HttpEventType.UploadProgress) {
-     //     this.processProgress.fileUpload = Math.round(100 * event.loaded / event.total);
-     //   } else if (response instanceof HttpResponse) {
-     if (response instanceof HttpResponse) {
+        //   if (response.type === HttpEventType.UploadProgress) {
+        //     this.processProgress.fileUpload = Math.round(100 * event.loaded / event.total);
+        //   } else if (response instanceof HttpResponse) {
+        if (response instanceof HttpResponse) {
           this.initTask();
           const respObj = JSON.parse(response.body);
-          const testRunRequest: TestRunRequest = new TestRunRequest;
-          testRunRequest.fileName = respObj.fileName;
-          testRunRequest.resultFolderName = respObj.fileLocation;
-          testRunRequest.templateKey = this.uploadForm.value.template;
-          testRunRequest.testCase = this.uploadForm.value.testCase;
+          this.testCase = this.uploadForm.value.testCase;
+          //          const testRunRequest: TestRunRequest = new TestRunRequest;
+          //          testRunRequest.fileName = respObj.fileName;
+          //          testRunRequest.resultFolderName = respObj.fileLocation;
+          //          testRunRequest.templateKey = this.uploadForm.value.template;
+          //          testRunRequest.testCase = this.uploadForm.value.testCase;
 
           //this.downloadLink = '/files/' + respObj.fileLocation + '/output_file.txt';
           this.downloadLink = '/files/' + respObj.fileLocation + '/' + respObj.fileName;
 
-		this.processStatus.fileUpload = 'success';
-        this.completedProcess = 'fileUpload';
-        this.completedProcessStatus = 'success';
+          this.processStatus['FileUpload'] = 'success';
+          this.completedProcess = 'fileUpload';
+          this.completedProcessStatus = 'success';
           //this.initTestRun(testRunRequest);
 
         }
       },
-      (error) => {
-      this.processStatus.fileUpload = 'error';
-        this.completedProcess = 'fileUpload';
-        this.completedProcessStatus = 'error';
-      },
-      () => {
-        console.log('completed: ' + this.continueProcessing);
-        if (this.completedProcessStatus === 'success' && !this.processStatus.process3) {
-          this.runningProcess = this.nextProcess[this.completedProcess];
-          this.getDummyStatus(event, this.runningProcess);
-        }
-      });
+        (error) => {
+          this.processStatus['FileUpload'] = 'error';
+          this.completedProcess = 'FileUpload';
+          this.completedProcessStatus = 'error';
+        },
+        () => {
+          console.log('completed: ' + this.continueProcessing);
+          if (this.completedProcessStatus === 'success' && !this.processStatus[this.lastProcess]) {
+            this.runningProcess = this.getNextProcess(this.completedProcess);
+            this.initTestRun(this.testCase, this.runningProcess);
+            // this.getDummyStatus(event, this.runningProcess);
+          }
+        });
 
       // this.selectedFiles = undefined;
 
@@ -235,15 +236,17 @@ initTask(){
     }
   }
 
-  initTestRun(testRunRequest: TestRunRequest) {
-    this.progress.percentage = 0;
-    this.uploadService.getTestRun(testRunRequest).subscribe(event => {
-      if (event.type === HttpEventType.UploadProgress) {
-        this.progress.percentage = Math.round(100 * event.loaded / event.total);
-      } else if (event instanceof HttpResponse) {
+  initTestRun(testCase: string, executionStep: string) {
+    this.uploadService.getResult(testCase, executionStep).subscribe(response => {
+    //  if (response instanceof HttpResponse) {
+      debugger;
         console.log('getTestRun!');
-      }
-    });
+    //  }
+    },
+      (error) => {// error
+      },
+      () => {// completed
+      });
   }
 
   selectFile(event) {
@@ -278,6 +281,15 @@ initTask(){
     if (!this.destroy$) {
       this.destroy$.unsubscribe();
     }
+  }
+
+  getNextProcess(curProcess): string {
+    var index = this.processList.indexOf(curProcess);
+    var nextItem = '';
+    if (index >= 0 && index < this.processList.length - 1) {
+      nextItem = this.processList[index + 1]
+    }
+    return nextItem;
   }
 
 }

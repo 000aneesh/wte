@@ -109,4 +109,20 @@ export class UploadService {
       .catch(this._errorHandler);
   }
 
+  getResult(testCase: string, executionStep: string) {
+    return this.http.get('/getResult?testCase=' + testCase + '&executionStep=' + executionStep)
+      .map((response: Response) => {
+        if (response.status < 200 || response.status >= 300) {
+          throw new Error('This request has failed ' + response.status);
+        } else {
+          return response.json();
+        }
+      })
+      .catch(this._errorHandler);
+  }
+
+  getProcessList() {
+    return ['FileGeneration', 'FTPTransfer', 'Verification', 'ProcessValidationEdgeToRaw', 'ProcessValidationRawToEdge'];
+  }
+
 }
