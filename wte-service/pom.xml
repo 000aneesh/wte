@@ -32,6 +32,7 @@
 			<scope>test</scope>
 		</dependency>
 
+
 		<!-- Springfox / Swagger -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -59,7 +60,11 @@
 			<scope>runtime</scope>
 		</dependency>
 
-
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.54</version>
+		</dependency>
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -76,14 +81,11 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.11</version>
 		</dependency>
-
 		<dependency>
-			<groupId>com.jcraft</groupId>
-			<artifactId>jsch</artifactId>
-			<version>0.1.54</version>
-		</dependency>
-
-
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.1</version>
+		</dependency> 
 
 	</dependencies>
 

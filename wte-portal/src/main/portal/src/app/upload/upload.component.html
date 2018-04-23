@@ -1,6 +1,6 @@
 <form class="form-horizontal" [formGroup]="uploadForm">
 	<tabset type="pills" #uploadTabs> 
-	<tab heading="Tab 1" id="tab1">
+	<tab heading="Test Details" id="tab1">
 	<table>
 		<tr>
 			<td>Test Case Name</td>
@@ -46,13 +46,13 @@
 	</table>
 
 
-	</tab> <tab heading="Basic title 2" id="tab2" disabled=true>
+	</tab> <tab heading="Processing Status" id="tab2" disabled=true>
 	<table>
 		<tr>
 			<th>Process</th>
 			<th style="width: 500px">Status</th>
 		</tr>
-		<tr>
+<!-- 		<tr>
 			<td>File Upload</td>
 			<td>
 			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.fileUpload == 'success'"></fa>
@@ -62,7 +62,7 @@
 					[animate]="true"><i>{{processProgress.fileUpload}}%</i></progressbar>
 			</div>
 			</td>
-		</tr>
+		</tr> -->
 
 		<tr>
 			<td>File Generation</td>

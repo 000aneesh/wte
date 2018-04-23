@@ -1,4 +1,4 @@
-package com.app.wte.controller;
+package com.app.wte.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,16 +15,12 @@ import org.springframework.util.ObjectUtils;
 
 @Component
 public class ConfigurationComponent {
+
 	private static final Logger logger = LoggerFactory.getLogger(ConfigurationComponent.class);
 	// private AppProperties app;
 
 	@Value("${app.filePath}")
 	private String filePath;
-
-	// @Autowired
-	// public void setApp(AppProperties app) {
-	// this.app = app;
-	// }
 
 	private ResourceLoader resourceLoader;
 
@@ -44,15 +40,10 @@ public class ConfigurationComponent {
 		if (!ObjectUtils.isEmpty(resources)) {
 			for (Resource resource : resources) {
 				if (resource.exists()) {
-					String value = resource.getURL().toString();
-
-					logger.info("resource.getFilename()->", resource.getFilename());
-					logger.info("value->", value);
 					String fileName = resource.getFilename();
 					int pos = fileName.lastIndexOf(".");
 					if (pos != -1) {
 						results.add(fileName.substring(0, pos));
-
 					}
 
 				}

@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import com.app.wte.model.FileUploadResponse;
-import com.app.wte.service.Task;
+import com.app.wte.util.ConfigurationComponent;
 import com.app.wte.util.StorageService;
 
 import io.swagger.annotations.ApiOperation;
@@ -41,14 +40,6 @@ import io.swagger.annotations.ApiResponses;
  */
 @RestController
 public class SpringController {
-
-	@Autowired
-	@Qualifier("fileGenerationTask")
-	Task fileGenerationTask;
-
-	@Autowired
-	@Qualifier("fTPTransferTask")
-	Task fTPTransferTask;
 
 	@Autowired
 	ConfigurationComponent confComponent;

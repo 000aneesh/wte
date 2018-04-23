@@ -97,8 +97,8 @@ export class UploadService {
     return this.http.get('/getTemplates');
   }
 
-  getDummyStatus(init) {
-    return this._http.get('/dummyStatus?init=' + init)
+  getDummyStatus(process) {
+    return this._http.get('/dummyStatus?process=' + process)
       .map((response: Response) => {
         if (response.status < 200 || response.status >= 300) {
           throw new Error('This request has failed ' + response.status);

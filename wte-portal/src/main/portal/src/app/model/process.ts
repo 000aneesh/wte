@@ -8,7 +8,7 @@ export class ProcessStatus {
 }
 
 export class ProcessProgress {
-  fileUpload: Number = 0;
+//fileUpload: Number = 0;
   fileGeneration: Number = 0;
   fileCopy: Number = 0;
   process1: Number = 0;

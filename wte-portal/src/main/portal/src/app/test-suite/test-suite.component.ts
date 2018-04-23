@@ -26,19 +26,16 @@ export class TestSuiteComponent implements OnInit {
     className: ['table-striped', 'table-bordered']
   };
 
-  public constructor() {
-  }
-
-  public ngOnInit():void {
-  }
-
-
   getData():any {
     return [
-    {column1:'asas',column2:'asasqw',column3:'asasas',column4:'qwqasas'}
-    {column1:'dfdfdf',column2:'asaas',column3:'aasasas',column4:'ghdfdf'}
-    {column1:'aerwsfs',column2:'adferes',column3:'ghgthf',column4:'erergr'}
+    {column1:'asas',column2:'asasqw',column3:'asasas',column4:'qwqasas'},
+    {column1:'dfdfdf',column2:'asaas',column3:'aasasas',column4:'ghdfdf'},
+    {column1:'aerwsfs',column2:'adferes',column3:'ghgthf',column4:'erergr'},
     {column1:'yjyj',column2:'yjas',column3:'assd',column4:'aasass'}
     ];
+    }
+
+
+
 
 }

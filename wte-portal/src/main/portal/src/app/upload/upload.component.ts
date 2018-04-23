@@ -176,16 +176,15 @@ initTask(){
 	  this.uploadTabs.tabs[1].disabled = false;
       this.uploadTabs.tabs[1].active = true;
       this.downloadLink = undefined;
+           
+      this.uploadService.uploadFile(this.currentFileUpload).subscribe(response => {
       
-      this.initTask();
-      
-      this.uploadService.uploadFile(this.currentFileUpload).subscribe(event => {
-      
-        if (event.type === HttpEventType.UploadProgress) {
-          this.processProgress.fileUpload = Math.round(100 * event.loaded / event.total);
-        } else if (event instanceof HttpResponse) {
-          const respObj = JSON.parse(event.body);
-
+     //   if (response.type === HttpEventType.UploadProgress) {
+     //     this.processProgress.fileUpload = Math.round(100 * event.loaded / event.total);
+     //   } else if (response instanceof HttpResponse) {
+     if (response instanceof HttpResponse) {
+          this.initTask();
+          const respObj = JSON.parse(response.body);
           const testRunRequest: TestRunRequest = new TestRunRequest;
           testRunRequest.fileName = respObj.fileName;
           testRunRequest.resultFolderName = respObj.fileLocation;
