@@ -9,11 +9,11 @@ export class ProcessStatus {
 
 export class ProcessProgress {
 //fileUpload: Number = 0;
-  fileGeneration: Number = 0;
-  fileCopy: Number = 0;
-  process1: Number = 0;
-  process2: Number = 0;
-  process3: Number = 0;
+//  fileGeneration: Number = 0;
+//  fileCopy: Number = 0;
+//  process1: Number = 0;
+//  process2: Number = 0;
+//  process3: Number = 0;
 }
 
 export class NextProcess {
@@ -24,4 +24,18 @@ export class NextProcess {
   process1: String = 'process2';
   process2: String = 'process3';
   process3: String = '';
+}
+
+export class Process {
+  name: string;
+  status: string;
+  progress: Number;
+  downloadLink: string;
+  
+  Process(name:string, status:string, progress:Number, downloadLink:string){
+  this.name = name;
+  this.status = status;
+  this.progress = progress;
+  this.downloadLink = downloadLink;
+  }
 }

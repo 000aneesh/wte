@@ -11,16 +11,16 @@ import com.app.wte.step.TestExecutionStep;
 public abstract class TestSuite implements Runnable {
 
 	@Autowired
-	@Qualifier("fileGenerationTask")
-	TestExecutionStep fileGenerationTask;
+	@Qualifier("fileGenerationStep")
+	TestExecutionStep fileGenerationStep;
 
 	@Autowired
-	@Qualifier("fTPTransferTask")
-	TestExecutionStep fTPTransferTask;
+	@Qualifier("fTPTransferStep")
+	TestExecutionStep fTPTransferStep;
 	
 	@Autowired
-	@Qualifier("dBValidationTask")
-	TestExecutionStep dBValidationTask;
+	@Qualifier("dBValidationStep")
+	TestExecutionStep dBValidationStep;
 
 	ExecutionContext executionContext;
 

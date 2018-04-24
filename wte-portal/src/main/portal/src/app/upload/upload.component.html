@@ -127,6 +127,31 @@
 			</div>
 			</td>
 		</tr>
+		
+		
+		
+		
+		
+		<tr *ngFor="let process of processList;">
+			<td>{{process.name}}</td>
+			<td>
+			<fa [name]="'check'" [size]=1 *ngIf="process.status == 'COMPLETED'"></fa>
+			<fa [name]="'close'" [size]=1 *ngIf="process.status == 'ERROR'"></fa>
+			<a title="Download" *ngIf="process.downloadLink" href='{{downloadLink}}'><fa [name]="'download'" [size]=1></fa></a>
+			<div *ngIf="process.status == 'IN_PROGRESS'">
+				<progressbar max="100" [value]="process.progress" type="success" [striped]="true" 
+					[animate]="true"><i>{{process.progress}}%</i></progressbar>
+			</div>
+				</td>
+				<td><!-- <a *ngIf="downloadLink" href='{{downloadLink}}'>Download
+					file</a>  -->
+					 
+					 </td>
+		</tr>
+		
+		
+		
+		
 	</table>
 	</tab> </tabset>
 </form>

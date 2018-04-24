@@ -23,9 +23,9 @@ public class ConsumerTestSuite extends TestSuite {
 
 	@PostConstruct
 	public void initialize(){
-		taskList.add(fileGenerationTask);
-		taskList.add(fTPTransferTask);
-		taskList.add(dBValidationTask);
+		taskList.add(fileGenerationStep);
+		taskList.add(fTPTransferStep);
+		taskList.add(dBValidationStep);
 	}
 	
 	@Override
@@ -33,7 +33,9 @@ public class ConsumerTestSuite extends TestSuite {
 		
 		logger.info("ConsumerTestSuite:executeTest Called from thread");
 		for(TestExecutionStep task:taskList){
+			task.preprocess(executionContext);
 			task.execute(executionContext);	
+			task.postProcess(executionContext); 
 		}
 		
 	}

@@ -85,11 +85,9 @@ export class UploadService {
     return this.http.get('/getallfiles');
   }
 
-  getTestRun(reqJSON): Observable<any> {
-    const req = new HttpRequest('POST', '/testRun', reqJSON, {
-      reportProgress: true,
-      responseType: 'text'
-    });
+  initTestCaseRun(testCase:string, fileName:string, templateKey:string, resultFolderName:string): Observable<any> {
+    const req = new HttpRequest('GET', '/testRun?testCase=' + testCase + '&fileName=' + fileName +
+     '&templateKey=' + templateKey +'&resultFolderName='+ resultFolderName);
     return this.http.request(req);
   }
 
@@ -110,19 +108,15 @@ export class UploadService {
   }
 
   getResult(testCase: string, executionStep: string) {
-    return this.http.get('/getResult?testCase=' + testCase + '&executionStep=' + executionStep)
-      .map((response: Response) => {
-        if (response.status < 200 || response.status >= 300) {
-          throw new Error('This request has failed ' + response.status);
-        } else {
-          return response.json();
-        }
-      })
-      .catch(this._errorHandler);
+    return this.http.get('/getResult?testCase=' + testCase + '&executionStep=' + executionStep);
+  }
+  
+  getResultDetails(testCase: string, executionStep: string) {
+    return this.http.get('/getResultDetails?testCase=' + testCase + '&executionStep=' + executionStep);
   }
 
   getProcessList() {
-    return ['FileGeneration', 'FTPTransfer', 'Verification', 'ProcessValidationEdgeToRaw', 'ProcessValidationRawToEdge'];
+    return ['FileGeneration', 'FTPTransfer', /*'Verification',*/ 'ProcessValidationEdgeToRaw', 'ProcessValidationRawToEdge'];
   }
 
 }

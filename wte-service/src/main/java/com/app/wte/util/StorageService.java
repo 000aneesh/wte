@@ -28,7 +28,7 @@ public class StorageService {
 	public String store(MultipartFile file) {
 		String uniqueTimeStamp = WTEUtils.getUniqueTimeStamp();
 		try {
-			Path fileLocation = Paths.get(uploadPath + File.separator + uniqueTimeStamp);
+			Path fileLocation = Paths.get(uploadPath + File.separator + uniqueTimeStamp + File.separator + "TestData");
 
 			if (!Files.exists(fileLocation)) {
 				try {

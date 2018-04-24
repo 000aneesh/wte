@@ -20,7 +20,6 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.app.wte.model.ExecutionContext;
 import com.app.wte.model.TestRecord;
@@ -38,52 +37,23 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.Version;
 
+
 public class WTEUtils {
-
-	@Value("${upload-path}")
-	private static String uploadPath;
-
-	@Value("${templatePath}")
-	private static String templatePath;
 	
-	@Value("${ftpFilePath}")
-	private static String ftpFilePath;
 	
-	@Value("${host}")
-	private static String host;
-	
-	@Value("${port}")
-	private static String port;
-	
-	@Value("${username}")
-	private static String userName;
-	
-	@Value("${password}")
-	private static String password;
-
 	public static String getUniqueTimeStamp() {
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		String strDate = sdfDate.format(new Date());
 		return strDate;
-
-		// return new Date().getTime();
 	}
-
-	// public static String getUploadPath() throws IOException {
-	// String tempPath = getExternalProperty("upload-path") + File.separator;
-	// return tempPath;
-	// }
-
-//	public static String getExternalProperty(String propertyKey) throws IOException {
-//		Properties prop = new Properties();
-//		FileInputStream inputStream = new FileInputStream(
-//				BASE_PATH + WTEConstants.EXT_PROPERTY_FOLDER + File.separator + WTEConstants.EXT_PROPERTY_FILE);
-//		prop.load(inputStream);
-//		String propertyValue = prop.getProperty(propertyKey);
-//		return propertyValue;
-//	}
-
-	public static void jaxbObjectToXML(ExecutionContext executionContext,String folderName) {
+	
+	/*public void createResultsFolder(){
+		String resultFolderName="Run-"+getUniqueTimeStamp();		
+		File resultDir=new File(uploadPath+File.separator+resultFolderName);
+		resultDir.mkdirs();
+		
+	}*/
+	public static void jaxbObjectToXML(ExecutionContext executionContext, String uploadPath,String folderName) {
 
         try {
         	File resultDir=new File(uploadPath+File.separator+executionContext.getResultFolderName()+File.separator+"Results");
@@ -100,7 +70,7 @@ public class WTEUtils {
             e.printStackTrace();
         }
     }
-	public static void readFromExcel(ExecutionContext executionContext) throws IOException{
+	public static void readFromExcel(ExecutionContext executionContext,String uploadPath, String templatePath) throws IOException{
 		
 		FileInputStream excelFile;
 		XSSFRow row;
@@ -185,7 +155,7 @@ public class WTEUtils {
 					TestRecord testRecord=new TestRecord();
 					testRecord.getInputTestData().putAll(parameterMap);
 					testRecordMap.put(xLvalue[r][1],testRecord); 									
-					templateProcess(parameterMap,inputFile,templateFile);
+					templateProcess(parameterMap,inputFile,templateFile,templatePath);
 					key++;
 				}
 			}
@@ -198,7 +168,7 @@ public class WTEUtils {
 		}
 	
 	}
-	public static void templateProcess(Map<String, String> parameterMap,String inputFile, String templateFile) {
+	public static void templateProcess(Map<String, String> parameterMap,String inputFile, String templateFile, String templatePath) {
 		Writer file = null;
 		BufferedWriter bw = null;
 		PrintWriter pw = null;
@@ -231,7 +201,8 @@ public class WTEUtils {
 			}
 		}
 	}
-	public static void copyToServer(ExecutionContext executionContext) throws JSchException, SftpException{
+	public static void copyToServer(ExecutionContext executionContext, String uploadPath, String ftpFilePath, 
+			String host, String port, String userName, String password) throws JSchException, SftpException{
 		int portNumber= Integer.parseInt(port);
 		Session session=null;
 		Channel channel=null;

@@ -12,16 +12,30 @@ import com.app.wte.model.ExecutionContext;
 import com.app.wte.type.ExecutionStatusType;
 import com.app.wte.type.ExecutionStepType;
 import com.app.wte.util.WTEUtils;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 
-@Service(value="fTPTransferTask")
+@Service(value="fTPTransferStep")
 public class FTPTransferStep implements TestExecutionStep {
 	
+	
+	@Value("${upload-path}")
+	private String uploadPath;
 	
 	@Value("${ftpFilePath}")
 	private String ftpFilePath;
 	
-	@Value("${upload-path}")
-	private String uploadPath;
+	@Value("${host}")
+	private String host;
+	
+	@Value("${port}")
+	private String port;
+	
+	@Value("${ftp.user}")
+	private String userName;
+	
+	@Value("${password}")
+	private String password;
 	
 	ExecutionStepType executionTaskType=ExecutionStepType.FTPTransfer;
 
@@ -30,23 +44,24 @@ public class FTPTransferStep implements TestExecutionStep {
 		try {
 			 File sourceFile = new File(uploadPath + File.separator +executionContext.getResultFolderName()+File.separator+"TestData"
 			 			+File.separator+executionContext.getResultFolderName()+".txt");
-			 File destFile = new File(ftpFilePath);
+			 File destFile = new File(ftpFilePath+"/"+executionContext.getResultFolderName()+".txt");
 			 Files.copy(sourceFile.toPath(), destFile.toPath());
-			//wTEUtils.copyToServer(executionContext);
+			 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.COMPLETED);
+			//WTEUtils.copyToServer(executionContext,uploadPath,ftpFilePath,host,port,userName,password);
 			
-			 WTEUtils.jaxbObjectToXML(executionContext, "");
-	         }/* catch (JSchException e) {
+			 WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");
+	         } /*catch (JSchException e) {
 	 			 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.ERROR);
-	 			 wTEUtils.jaxbObjectToXML(executionContext, "");
+	 			 WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");
 	 			 e.printStackTrace();
 			} catch (SftpException e) {
 				 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.ERROR);
-	        	wTEUtils.jaxbObjectToXML(executionContext, "");
+	        	WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");
 	 			e.printStackTrace();
 				e.printStackTrace();
 			}*/ catch (IOException e) {
 				WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.ERROR);
-				WTEUtils.jaxbObjectToXML(executionContext, "");	
+				WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");	
 				e.printStackTrace();
 			}	
 		
@@ -59,7 +74,7 @@ public class FTPTransferStep implements TestExecutionStep {
 	public void preprocess(ExecutionContext executionContext) {
 		// TODO 
 		 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.IN_PROGRESS);
-		 WTEUtils.jaxbObjectToXML(executionContext, "");	
+		 WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");	
 		
 	}
 
@@ -67,7 +82,7 @@ public class FTPTransferStep implements TestExecutionStep {
 	public void postProcess(ExecutionContext executionContext) {
 		if(WTEUtils.getStatus(executionContext, executionTaskType)!=ExecutionStatusType.ERROR){
 			WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.COMPLETED);
-			WTEUtils.jaxbObjectToXML(executionContext, "");	
+			WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");	
 		}
 		
 	}

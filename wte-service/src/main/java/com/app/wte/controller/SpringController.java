@@ -105,7 +105,7 @@ public class SpringController {
 	public ResponseEntity<Resource> getFile(@PathVariable String filePath, @PathVariable String fileName)
 			throws IOException {
 		System.out.println("file : " + filePath + File.separator + fileName);
-		Resource file = storageService.loadFile(filePath + File.separator + fileName);
+		Resource file = storageService.loadFile(filePath + File.separator + "TestData" + File.separator +  fileName);
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
 				.body(file);
