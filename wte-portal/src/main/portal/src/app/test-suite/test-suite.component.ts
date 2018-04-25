@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TestSuiteService } from './test-suite.service';
 
@@ -11,22 +11,21 @@ import { TestSuiteService } from './test-suite.service';
 export class TestSuiteComponent implements OnInit {
 
   testCase: string;
-  private sub: any;
-  public rows: Array<any>;
+  data: Array<any>;
+  modalTitle: string;
+  modalBody: string;
+  display = 'none';
 
-  public data: Array<any>;
   constructor(private route: ActivatedRoute, private testSuiteService: TestSuiteService) { }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
       this.testCase = params['testCase'];
     });
 
 
     this.testSuiteService.getTestRecords(this.testCase).subscribe(response => {
-      var respArray = JSON.parse(JSON.stringify(response));
-
-      this.data = respArray;//JSON.parse(JSON.stringify(response));
+      this.data = JSON.parse(JSON.stringify(response));
     },
       (error) => {// error
       },
@@ -34,11 +33,18 @@ export class TestSuiteComponent implements OnInit {
 
       });
 
-
+  }
+  showDetails(event) {
+    this.display = 'block';
+    this.modalTitle = 'Details';
+    this.modalBody = 'Geting Details... Please wait...';
+    setTimeout(() => {
+      this.modalBody = 'Data updated';
+    }, 2000);
   }
 
-  carClicked(event){
-    alert('asas');
+  onCloseHandled() {
+    this.display = 'none';
   }
 
 }

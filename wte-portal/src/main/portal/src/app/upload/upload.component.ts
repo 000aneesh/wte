@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 //import {TestRunRequest} from '../model/testrunrequest';
-import { ProcessStatus, ProcessProgress, NextProcess, Process } from '../model/process';
+import { Process } from '../model/process';
 
 import { UploadService } from './upload.service';
 import { Subject } from 'rxjs/Subject';
@@ -27,44 +27,28 @@ export class UploadComponent implements OnInit, OnDestroy {
   selectedFiles: FileList;
   currentFileUpload: File;
   progress: number;
-  processProgress: ProcessProgress;
-  testCase: string;
+  testCase:string;  
+  lastProcess: string;
+  lastProcessStatus:string;
   fileName: string;
   fileLocation: string;
   templateName: string;
   processNameList: Array<string>;
   processList: Array<Process>;
   processObjct: Process;
-  lastProcess: string;
-  inputMsg = '';
-  outputMsg = 'initial val';
-  i = 0;
-  continueProcessing = false;
+  
   uploadForm: FormGroup;
   destroy$: Subject<boolean>;
   downloadLink: string;
   templateList: Array<any>;
-  completedProcess: string;
-  completedProcessStatus: string;
-  runningProcess: string;
-  processStatus: ProcessStatus;
-  timerVar: any;
-  nextProcess: NextProcess = new NextProcess();
+ 
   constructor(private uploadService: UploadService, private builder: FormBuilder) {
-    //    this.continueProcessing = true;
     this.destroy$ = new Subject<boolean>();
-
-    /* router.events.subscribe((val) => {
-       if (location.path() !== '/upload') {
-         this.continueProcessing = false;
-       }
-     });*/
-
   }
 
   ngOnInit() {
     // this.template = '';
-    this.continueProcessing = true;
+    this.lastProcessStatus = '';
 
     this.uploadForm = this.builder.group({
       testCase: new FormControl(''),
@@ -83,46 +67,7 @@ export class UploadComponent implements OnInit, OnDestroy {
       });
   }
 
-
-
-  /* getDummyStatus(event, init) {
-     //    this.processProgress.percentage = 0;
-     //this.uploadTabs.tabs[1].disabled = false;
-     //this.uploadTabs.tabs[1].active = true;
-     if (this.runningProcess === this.nextProcess.initialProcess.toString()) {
-       this.initTask();
-     }
- 
-     this.timerVar = setInterval(() => {
-       if (this.processProgress[this.runningProcess] < 80) {
-         this.processProgress[this.runningProcess] = this.processProgress[this.runningProcess] + Math.floor(Math.random() * 20);
-       }
-       console.log(this.runningProcess + ' : ' + this.processProgress[this.runningProcess]);
-     }, 1000);
-     this.uploadService.getDummyStatus(init)
-       .subscribe(
-       (response) => {
-         this.processStatus[response.process] = response.status;
-         this.completedProcess = response.process;
-         this.completedProcessStatus = response.status;
-         clearInterval(this.timerVar);
-       },
-       (error) => {
-       },
-       () => {
-         console.log('completed: ' + this.continueProcessing);
-         if (this.completedProcessStatus === 'success' && !this.processStatus && this.processStatus['process3']) {
-           this.runningProcess = this.nextProcess[this.completedProcess];
-           this.getDummyStatus(event, this.runningProcess);
-         }
-       });
-   } */
-
   initTask() {
-    this.processProgress = new ProcessProgress();
-    this.processStatus = new ProcessStatus();
-    this.runningProcess = this.processNameList && this.processNameList.length > 0 ?
-      this.processNameList[0] : ''; // this.nextProcess.initialProcess.toString();
     this.uploadTabs.tabs[1].disabled = false;
     this.uploadTabs.tabs[1].active = true;
   }
@@ -150,31 +95,13 @@ export class UploadComponent implements OnInit, OnDestroy {
 
           //this.downloadLink = '/files/' + respObj.fileLocation + '/output_file.txt';
           this.downloadLink = '/files/' + respObj.fileLocation + '/' + respObj.fileLocation + '.txt';
-
-          this.processStatus['FileUpload'] = 'success';
-          this.completedProcess = 'fileUpload';
-          this.completedProcessStatus = 'success';
-
-          this.fileName = respObj.fileName;
-          this.templateName = this.uploadForm.value.template;
-          this.fileLocation = respObj.fileLocation;
-
-          //  if (this.completedProcessStatus === 'success' && !this.processStatus[this.lastProcess]) {
-          this.runningProcess = this.getNextProcess(this.completedProcess);
-          //          this.initTestCaseRun(this.testCase, respObj.fileName, this.uploadForm.value.template, respObj.fileLocation);
-          // this.getDummyStatus(event, this.runningProcess);
-          //  }
-
+          // init Test case run after successful uploading of the test data 
+          this.initTestCaseRun(this.testCase, respObj.fileName, this.uploadForm.value.template, respObj.fileLocation);
         }
       },
         (error) => {
-          this.processStatus['FileUpload'] = 'error';
-          this.completedProcess = 'FileUpload';
-          this.completedProcessStatus = 'error';
         },
         () => {
-
-          this.initTestCaseRun(this.testCase, this.fileName, this.templateName, this.fileLocation);
         });
 
     }
@@ -190,7 +117,7 @@ export class UploadComponent implements OnInit, OnDestroy {
         this.progress = 0;
         this.processObjct = new Process(this.processNameList[0], 'IN_PROGRESS', 0);
         this.updateProcessList(this.processObjct);
-        this.getResult(this.testCase, this.processNameList[0]);
+        this.getResult(testCase, this.processNameList[0]);
       });
   }
 
@@ -223,6 +150,10 @@ export class UploadComponent implements OnInit, OnDestroy {
         // clearInterval(this.timerVar);
         this.processObjct = new Process(executionStep, 'COMPLETED', 100);
         this.updateProcessList(this.processObjct);
+
+        if(this.lastProcess === executionStep){
+          this.lastProcessStatus = 'COMPLETED';
+        }
 
         //   	this.processProgress[executionStep] = 100;
         this.getResultDetails(testCase, executionStep);

@@ -4,22 +4,28 @@
 			<table>
 				<tr>
 					<td>Test Case Name</td>
-					<td><input type="text" formControlName="testCase" /></td>
+					<td>
+						<input type="text" formControlName="testCase" />
+					</td>
 				</tr>
 
 				<tr>
 					<td>Template Name</td>
-					<td><select formControlName="template" name="template">
-					<option selected="" value="">Select One</option>
-					<option [ngValue]="template" *ngFor="let template of templateList">{{template}}</option>
-			</select></td>
+					<td>
+						<select formControlName="template" name="template">
+							<option selected="" value="">Select One</option>
+							<option [ngValue]="template" *ngFor="let template of templateList">{{template}}</option>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<td>Upload Test File</td>
-					<td><label class="btn btn-default"> <input type="file"
-					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-					(change)="selectFile($event)">
-			</label></td>
+					<td>
+						<label class="btn btn-default">
+							<input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+							 (change)="selectFile($event)">
+						</label>
+					</td>
 				</tr>
 
 				<tr>
@@ -44,19 +50,20 @@
 				<tr *ngFor="let process of processList;">
 					<td>{{process.name}}</td>
 					<td>
-						<fa [name]="'check'" [size]=1 *ngIf="process.status == 'COMPLETED'" title="Success" ></fa>
-						<fa [name]="'close'" [size]=1 *ngIf="process.status == 'ERROR'" title="Error" ></fa>
+						<fa [name]="'check'" [size]=1 *ngIf="process.status == 'COMPLETED'" title="Success"></fa>
+						<fa [name]="'close'" [size]=1 *ngIf="process.status == 'ERROR'" title="Error"></fa>
 						&nbsp; &nbsp;
 						<a title="Download" *ngIf="process.name == 'FileGeneration' && process.status == 'COMPLETED'" href='{{downloadLink}}'>
 							<fa [name]="'download'" [size]=1></fa>
 						</a>
 						<div *ngIf="process.status == 'IN_PROGRESS'">
-							<progressbar max="100" [value]="process.progress" type="success" [striped]="true" [animate]="true"><i>{{process.progress}}%</i></progressbar>
+							<progressbar max="100" [value]="process.progress" type="success" [striped]="true" [animate]="true">
+								<i>{{process.progress}}%</i>
+							</progressbar>
 						</div>
 						<span *ngIf="process.totalRecordsCount !== undefined">
-							Total Records : {{process.totalRecordsCount}} &nbsp; &nbsp;
-							Valid Records  : {{process.validRecordsCount}} &nbsp; &nbsp;
-							Invalid Records  : {{process.invalidRecordsCount}}
+							Total Records : {{process.totalRecordsCount}} &nbsp; &nbsp; Valid Records : {{process.validRecordsCount}} &nbsp; &nbsp; Invalid
+							Records : {{process.invalidRecordsCount}}
 						</span>
 					</td>
 					<td>
@@ -64,7 +71,7 @@
 				</tr>
 
 			</table>
-<button type="button" [routerLink]="['/testSuite', testCase]">Test Suite</button>
+			<button *ngIf="lastProcessStatus === 'COMPLETED'" type="button" [routerLink]="['/testSuite', testCase]">Test Suite</button>
 		</tab>
 	</tabset>
 </form>
@@ -72,3 +79,4 @@
 
 <!-- <a *ngIf="downloadLink" href='{{downloadLink}}'>Download
 					file</a>  -->
+					
