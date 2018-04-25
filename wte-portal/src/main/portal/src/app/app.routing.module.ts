@@ -10,7 +10,7 @@ import {TestSuiteComponent} from './test-suite/test-suite.component';
 const routes: Routes = [
   {path: '', component: UploadComponent},
   {path: 'admin', component: AdminComponent},
-  {path: 'testSuite', component: TestSuiteComponent},
+  {path: 'testSuite/:testCase', component: TestSuiteComponent},
   {path: 'upload', redirectTo: '/', pathMatch: 'full'}
 ];
 

@@ -49,16 +49,13 @@ public class TestEngine {
 		testplan.put(testCase, testSuite);
 		
 		ExecutionContext executionContext=new ExecutionContext();
-		ExecutionResult executionResult=new ExecutionResult();
 		executionContext.setTestCase(testCase);
 		executionContext.setFileName(fileName);
 		executionContext.setTemplateKey(templateKey);
 		executionContext.setResultFolderName(resultFolderName);
 		//executionContext.setResultFolderName(uploadPath+File.separator+resultFolderName);
-		executionContext.setExecutionResult(executionResult);
 		
 		testSuite.setExecutionContext(executionContext);
-		
 		
 		taskExecutor.execute(testplan.get(testCase));
 	}

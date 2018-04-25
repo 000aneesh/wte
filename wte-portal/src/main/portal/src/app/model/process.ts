@@ -29,13 +29,15 @@ export class NextProcess {
 export class Process {
   name: string;
   status: string;
-  progress: Number;
-  downloadLink: string;
+  progress: number;
+  totalRecordsCount: number;
+  validRecordsCount: number;
+  invalidRecordsCount: number;
   
-  Process(name:string, status:string, progress:Number, downloadLink:string){
+  constructor(name:string, status:string, progress:number){
   this.name = name;
   this.status = status;
   this.progress = progress;
-  this.downloadLink = downloadLink;
+//  this.downloadLink = downloadLink;
   }
 }

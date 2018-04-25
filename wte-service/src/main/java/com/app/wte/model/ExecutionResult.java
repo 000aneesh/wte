@@ -11,12 +11,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="ExecutionResult")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ExecutionResult {
-
 	
-	
-	
-	Map<String,TestRecord> testRecordMap = new HashMap<String,TestRecord>();
-	
+	Map<String,TestRecord> testRecordMap = new LinkedHashMap<String,TestRecord>();
 
 	
 	public Map<String, TestRecord> getTestRecordMap() {

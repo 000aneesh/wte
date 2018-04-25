@@ -44,12 +44,10 @@ public class FTPTransferStep implements TestExecutionStep {
 		try {
 			 File sourceFile = new File(uploadPath + File.separator +executionContext.getResultFolderName()+File.separator+"TestData"
 			 			+File.separator+executionContext.getResultFolderName()+".txt");
-			 File destFile = new File(ftpFilePath+"/"+executionContext.getResultFolderName()+".txt");
+			 File destFile = new File(ftpFilePath+File.separator+executionContext.getResultFolderName()+".txt");
 			 Files.copy(sourceFile.toPath(), destFile.toPath());
-			 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.COMPLETED);
 			//WTEUtils.copyToServer(executionContext,uploadPath,ftpFilePath,host,port,userName,password);
 			
-			 WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");
 	         } /*catch (JSchException e) {
 	 			 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.ERROR);
 	 			 WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");
@@ -59,7 +57,7 @@ public class FTPTransferStep implements TestExecutionStep {
 	        	WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");
 	 			e.printStackTrace();
 				e.printStackTrace();
-			}*/ catch (IOException e) {
+			} */catch (IOException e) {
 				WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.ERROR);
 				WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");	
 				e.printStackTrace();

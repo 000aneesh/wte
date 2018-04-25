@@ -1,41 +1,44 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TestSuiteService } from './test-suite.service';
 
 @Component({
   selector: 'app-test-suite',
   templateUrl: './test-suite.component.html',
-  styleUrls: ['./test-suite.component.css']
+  styleUrls: ['./test-suite.component.css'],
+  providers: [TestSuiteService]
 })
 export class TestSuiteComponent implements OnInit {
 
-  constructor() { }
+  testCase: string;
+  private sub: any;
+  public rows: Array<any>;
+
+  public data: Array<any>;
+  constructor(private route: ActivatedRoute, private testSuiteService: TestSuiteService) { }
 
   ngOnInit() {
+    this.sub = this.route.params.subscribe(params => {
+      this.testCase = params['testCase'];
+    });
+
+
+    this.testSuiteService.getTestRecords(this.testCase).subscribe(response => {
+      var respArray = JSON.parse(JSON.stringify(response));
+
+      this.data = respArray;//JSON.parse(JSON.stringify(response));
+    },
+      (error) => {// error
+      },
+      () => {// completed
+
+      });
+
+
   }
-  
-  public rows:Array<any> = this.getData();
-  
-  public columns:Array<any> = [
-    {title: 'Column 1', name: 'column1'},
-    {title: 'Column 2', name: 'column2'},
-    {title: 'Column 3', name: 'column3'},
-    {title: 'Column 4', name: 'column4'}
-  ];
-  
 
-  public config:any = {  
-    className: ['table-striped', 'table-bordered']
-  };
-
-  getData():any {
-    return [
-    {column1:'asas',column2:'asasqw',column3:'asasas',column4:'qwqasas'},
-    {column1:'dfdfdf',column2:'asaas',column3:'aasasas',column4:'ghdfdf'},
-    {column1:'aerwsfs',column2:'adferes',column3:'ghgthf',column4:'erergr'},
-    {column1:'yjyj',column2:'yjas',column3:'assd',column4:'aasass'}
-    ];
-    }
-
-
-
+  carClicked(event){
+    alert('asas');
+  }
 
 }

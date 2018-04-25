@@ -28,7 +28,7 @@ public class FileGenerationStep implements TestExecutionStep {
 		try {
 			
 			WTEUtils.readFromExcel(executionContext,uploadPath,templatePath);
-			WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.COMPLETED);
+			
 		} catch (FileNotFoundException e) {
 			 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.ERROR);
 	         WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");

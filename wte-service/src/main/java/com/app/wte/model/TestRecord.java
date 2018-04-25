@@ -12,13 +12,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="TestRecord")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TestRecord {
-	//
-	Map<String,String> inputTestData=new LinkedHashMap<String,String>();
-	Map<String,String> expectedTestData=new LinkedHashMap<String,String>();
 	
 	int testCaseNumber;
 	String testCaseDescription;
-	
+	Map<String,String> inputTestData=new LinkedHashMap<String,String>();
+	Map<String,String> expectedTestData=new LinkedHashMap<String,String>();
+	String status;
 	TestResult testresult;
 	
 	public Map<String, String> getInputTestData() {
@@ -51,5 +50,11 @@ public class TestRecord {
 	public void setTestresult(TestResult testresult) {
 		this.testresult = testresult;
 	}
-
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 }

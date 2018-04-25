@@ -1,161 +1,74 @@
 <form class="form-horizontal" [formGroup]="uploadForm">
-	<tabset type="pills" #uploadTabs> 
-	<tab heading="Test Details" id="tab1">
-	<table>
-		<tr>
-			<td>Test Case Name</td>
-			<td><input type="text" formControlName="testCase" /></td>
-		</tr>
+	<tabset type="pills" #uploadTabs>
+		<tab heading="Test Details" id="tab1">
+			<table>
+				<tr>
+					<td>Test Case Name</td>
+					<td><input type="text" formControlName="testCase" /></td>
+				</tr>
 
-		<tr>
-			<td>Template Name</td>
-			<td><select formControlName="template" name="template">
+				<tr>
+					<td>Template Name</td>
+					<td><select formControlName="template" name="template">
 					<option selected="" value="">Select One</option>
 					<option [ngValue]="template" *ngFor="let template of templateList">{{template}}</option>
 			</select></td>
-		</tr>
-		<tr>
-			<td>Upload Test File</td>
-			<td><label class="btn btn-default"> <input type="file"
+				</tr>
+				<tr>
+					<td>Upload Test File</td>
+					<td><label class="btn btn-default"> <input type="file"
 					accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
 					(change)="selectFile($event)">
 			</label></td>
-		</tr>
+				</tr>
 
-		<!-- 	<tr [hidden]="!currentFileUpload">
-			<td colspan="2"><div style="width: 500px">
-					<div *ngIf="currentFileUpload" class="progress">
-						<div
-							class="progress-bar progress-bar-info progress-bar-striped progress-bar-wte"
-							role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
-							aria-valuemin="0" aria-valuemax="100"
-							[ngStyle]="{width:progress.percentage+'%'}">
-							{{progress.percentage}}%</div>
-					</div>
-				</div></td>
-		</tr>
- -->
-		<tr>
-			<td colspan="2">
-				<!-- <button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>  -->
-				<button type="button" name="submitBtn"
-					(click)="onSubmit();">Submit</button>
-			</td>
-		</tr>
+				<tr>
+					<td colspan="2">
+						<!-- <button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>  -->
+						<button type="button" name="submitBtn" (click)="onSubmit();">Submit</button>
+					</td>
+				</tr>
 
-	</table>
+			</table>
 
 
-	</tab> <tab heading="Processing Status" id="tab2" disabled=true>
-	<table>
-		<tr>
-			<th>Process</th>
-			<th style="width: 500px">Status</th>
-		</tr>
-<!-- 		<tr>
-			<td>File Upload</td>
-			<td>
-			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.fileUpload == 'success'"></fa>
-			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.fileUpload == 'error'"></fa>
-			<div *ngIf="processStatus && processStatus.fileUpload == ''">
-				<progressbar max="100" [value]="processProgress.fileUpload" type="success" [striped]="true" 
-					[animate]="true"><i>{{processProgress.fileUpload}}%</i></progressbar>
-			</div>
-			</td>
-		</tr> -->
+		</tab>
+		<tab heading="Processing Status" id="tab2" disabled=true>
+			<table>
+				<tr>
+					<th>Process</th>
+					<th style="width: 600px">Status</th>
+				</tr>
 
-		<tr>
-			<td>File Generation</td>
-			<td>
-			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.fileGeneration == 'success'"></fa>
-			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.fileGeneration == 'error'"></fa>
-			<a title="Download" *ngIf="processStatus && processStatus.fileGeneration == 'success'" href='{{downloadLink}}'><fa [name]="'download'" [size]=1></fa></a>
-			<div *ngIf="processStatus && processStatus.fileGeneration == ''">
-				<progressbar max="100" [value]="processProgress.fileGeneration" type="success" [striped]="true" 
-					[animate]="true"><i>{{processProgress.fileGeneration}}%</i></progressbar>
-			</div>
-				</td>
-				<td><!-- <a *ngIf="downloadLink" href='{{downloadLink}}'>Download
-					file</a>  -->
-					 
-					 </td>
-		</tr>
 
-		<tr>
-			<td>File Copy</td>
-			<td>
-			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.fileCopy == 'success'"></fa>
-			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.fileCopy == 'error'"></fa>
-			<div *ngIf="processStatus && processStatus.fileCopy == ''">
-				<progressbar max="100" [value]="processProgress.fileCopy" type="success" [striped]="true" 
-					[animate]="true"><i>{{processProgress.fileCopy}}%</i></progressbar>
-			</div>
-				</td>
-		</tr>
+				<tr *ngFor="let process of processList;">
+					<td>{{process.name}}</td>
+					<td>
+						<fa [name]="'check'" [size]=1 *ngIf="process.status == 'COMPLETED'" title="Success" ></fa>
+						<fa [name]="'close'" [size]=1 *ngIf="process.status == 'ERROR'" title="Error" ></fa>
+						&nbsp; &nbsp;
+						<a title="Download" *ngIf="process.name == 'FileGeneration' && process.status == 'COMPLETED'" href='{{downloadLink}}'>
+							<fa [name]="'download'" [size]=1></fa>
+						</a>
+						<div *ngIf="process.status == 'IN_PROGRESS'">
+							<progressbar max="100" [value]="process.progress" type="success" [striped]="true" [animate]="true"><i>{{process.progress}}%</i></progressbar>
+						</div>
+						<span *ngIf="process.totalRecordsCount !== undefined">
+							Total Records : {{process.totalRecordsCount}} &nbsp; &nbsp;
+							Valid Records  : {{process.validRecordsCount}} &nbsp; &nbsp;
+							Invalid Records  : {{process.invalidRecordsCount}}
+						</span>
+					</td>
+					<td>
+					</td>
+				</tr>
 
-		<tr>
-			<td>Process 1</td>
-			<td>
-			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.process1 == 'success'"></fa>
-			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.process1 == 'error'"></fa>
-				<div *ngIf="processStatus && processStatus.process1 == ''">
-				<progressbar max="100" [value]="processProgress.process1" type="success" [striped]="true" 
-					[animate]="true"><i>{{processProgress.process1}}%</i></progressbar>
-			</div>
-			</td>
-		</tr>
-
-		<tr>
-			<td>Process 2</td>
-			<td>
-			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.process2 == 'success'"></fa>
-			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.process2 == 'error'"></fa>				
-				<div *ngIf="processStatus && processStatus.process2 == ''">
-				<progressbar max="100" [value]="processProgress.process2" type="success" [striped]="true" 
-					[animate]="true"><i>{{processProgress.process2}}%</i></progressbar>
-			</div></td>
-		</tr>
-
-		<tr>
-			<td>Process 3</td>
-			<td>
-			<fa [name]="'check'" [size]=1 *ngIf="processStatus && processStatus.process3 == 'success'"></fa>
-			<fa [name]="'close'" [size]=1 *ngIf="processStatus && processStatus.process3 == 'error'"></fa>
-				<div *ngIf="processStatus && processStatus.process3 == ''">
-				<progressbar max="100" [value]="processProgress.process3" type="success" [striped]="true" 
-					[animate]="true"><i>{{processProgress.process3}}%</i></progressbar>
-			</div>
-			</td>
-		</tr>
-		
-		
-		
-		
-		
-		<tr *ngFor="let process of processList;">
-			<td>{{process.name}}</td>
-			<td>
-			<fa [name]="'check'" [size]=1 *ngIf="process.status == 'COMPLETED'"></fa>
-			<fa [name]="'close'" [size]=1 *ngIf="process.status == 'ERROR'"></fa>
-			<a title="Download" *ngIf="process.downloadLink" href='{{downloadLink}}'><fa [name]="'download'" [size]=1></fa></a>
-			<div *ngIf="process.status == 'IN_PROGRESS'">
-				<progressbar max="100" [value]="process.progress" type="success" [striped]="true" 
-					[animate]="true"><i>{{process.progress}}%</i></progressbar>
-			</div>
-				</td>
-				<td><!-- <a *ngIf="downloadLink" href='{{downloadLink}}'>Download
-					file</a>  -->
-					 
-					 </td>
-		</tr>
-		
-		
-		
-		
-	</table>
-	</tab> </tabset>
+			</table>
+<button type="button" [routerLink]="['/testSuite', testCase]">Test Suite</button>
+		</tab>
+	</tabset>
 </form>
 
-					<button type="button"  [routerLink]="['/testSuite']">Test Suite</button>
-					
-					
+
+<!-- <a *ngIf="downloadLink" href='{{downloadLink}}'>Download
+					file</a>  -->

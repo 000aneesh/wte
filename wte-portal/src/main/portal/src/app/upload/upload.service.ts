@@ -116,7 +116,7 @@ export class UploadService {
   }
 
   getProcessList() {
-    return ['FileGeneration', 'FTPTransfer', /*'Verification',*/ 'ProcessValidationEdgeToRaw', 'ProcessValidationRawToEdge'];
+    return ['FileGeneration', 'FTPTransfer', /*'Verification',*/ 'EDGE_TO_RAW', 'Raw_To_RA', 'RA_TO_RAW', 'Raw_To_R'];
   }
 
 }

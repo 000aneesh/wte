@@ -1,6 +1,8 @@
 package com.app.wte.model;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -12,9 +14,7 @@ import com.app.wte.type.ExecutionStepType;
 
 @XmlRootElement(name="ExecutionStatus")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ExecutionContext {
-	
-		ExecutionResult executionResult;
+public class ExecutionContext {		
 		
 		String testCase;
 		
@@ -28,20 +28,14 @@ public class ExecutionContext {
 		
 		LinkedHashMap<ExecutionStepType,ProcessValidationResult> taskSatusDetailsMap = new LinkedHashMap<ExecutionStepType,ProcessValidationResult>();
 		
+		List<TestRecord> testRecordList = new ArrayList<TestRecord>();
+		
 		public LinkedHashMap<ExecutionStepType,ExecutionStatusType> getTaskSatusMap() {
 			return taskSatusMap;
 		}
 
 		public void setTaskSatusMap(LinkedHashMap<ExecutionStepType,ExecutionStatusType> taskSatusMap) {
 			this.taskSatusMap = taskSatusMap;
-		}
-
-		public ExecutionResult getExecutionResult() {
-			return executionResult;
-		}
-		
-		public void setExecutionResult(ExecutionResult executionResult) {
-			this.executionResult = executionResult;
 		}
 
 		public String getTestCase() {
@@ -82,6 +76,14 @@ public class ExecutionContext {
 
 		public void setTaskSatusDetailsMap(LinkedHashMap<ExecutionStepType, ProcessValidationResult> taskSatusDetailsMap) {
 			this.taskSatusDetailsMap = taskSatusDetailsMap;
+		}
+
+		public List<TestRecord> getTestRecordList() {
+			return testRecordList;
+		}
+
+		public void setTestRecordList(List<TestRecord> testRecordList) {
+			this.testRecordList = testRecordList;
 		}
 		
 }
