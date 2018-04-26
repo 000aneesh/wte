@@ -166,10 +166,13 @@ export class UploadComponent implements OnInit, OnDestroy {
 
         }
       } else {
-        // clearInterval(this.timerVar);
+        this.processObjct = this.getProcessByName(executionStep);
+        this.processObjct.status = 'ERROR';
+        this.updateProcessList(this.processObjct);
       }
     },
       (error) => {// error
+        alert(error);
       },
       () => {// completed
       });
