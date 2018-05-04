@@ -15,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 
+import com.app.wte.constants.WTEConstants;
+import com.app.wte.testengine.TestEngine;
 import com.app.wte.util.ConfigurationComponent;
-import com.app.wte.util.WTEUtils;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Upload;
@@ -32,7 +35,7 @@ import com.vaadin.ui.Upload.SucceededListener;
 @SuppressWarnings("serial")
 @SpringComponent
 @Scope("prototype")
-public class CustomComponents extends Home {
+public class HomeView extends Home implements View {
 
 	@Value("${upload-path}")
 	private String uploadPath;
@@ -40,9 +43,14 @@ public class CustomComponents extends Home {
 	@Autowired
 	ConfigurationComponent confComponent;
 
-	public CustomComponents() {
+	@Autowired
+	TestEngine testEngine;
+
+	public HomeView() {
 
 	}
+
+	private String fileName;
 
 	@PostConstruct
 	public void init() throws IOException {
@@ -68,7 +76,8 @@ public class CustomComponents extends Home {
 			public void uploadStarted(StartedEvent event) {
 				System.out.println("uploadStarted " + event.getContentLength() + " " + event.getFilename());
 				if (event.getContentLength() == 0 || testCase.getValue() == null
-						|| testCase.getValue().trim().equals("") || templateName.getValue() == null || templateName.getValue().trim().equals("")) {
+						|| testCase.getValue().trim().equals("") || templateName.getValue() == null
+						|| templateName.getValue().trim().equals("")) {
 					Notification.show("All fields are mandatory", Notification.Type.WARNING_MESSAGE);
 					upload.interruptUpload();
 				}
@@ -100,7 +109,6 @@ public class CustomComponents extends Home {
 				// StreamResource myResource = createResource();
 				// FileDownloader fileDownloader = new FileDownloader(myResource);
 				// fileDownloader.extend(downloadBtn);
-
 			}
 
 			// private StreamResource createResource() {
@@ -122,13 +130,13 @@ public class CustomComponents extends Home {
 			//
 			// }
 		});
-		
+
 		upload.addFailedListener(new Upload.FailedListener() {
-			
+
 			@Override
 			public void uploadFailed(FailedEvent event) {
 				// TODO Auto-generated method stub
-				
+
 				System.out.println("error ............");
 				upload.interruptUpload();
 			}
@@ -142,39 +150,42 @@ public class CustomComponents extends Home {
 
 		@Override
 		public OutputStream receiveUpload(String filename, String mimeType) {
-			
-			if(filename != null && !filename.trim().equals("")) {
+
+			if (filename != null && !filename.trim().equals("")) {
+				fileName = filename;
 				System.out.println("receiveUpload - filename : " + filename);
 				// downloadBtn.setVisible(false);
 				// Create upload stream
 				FileOutputStream fos = null; // Stream to write to
 				try {
-					String uniqueTimeStamp = WTEUtils.getUniqueTimeStamp();
+					// String uniqueTimeStamp = WTEUtils.getUniqueTimeStamp();
 					Path fileLocation = Paths
-							.get(uploadPath + File.separator + uniqueTimeStamp + File.separator + "TestData");
-					
+							.get(uploadPath + File.separator + testCase.getValue() + File.separator + "TestData");
+
 					if (!Files.exists(fileLocation)) {
 						try {
 							Files.createDirectories(fileLocation);
 						} catch (IOException e) {
 							throw new RuntimeException("Could not initialize storage!");
 						}
+						// Open the file for writing.
+						File outputFile = new File(fileLocation + File.separator + filename);
+						fos = new FileOutputStream(outputFile);
+					}else {
+						Notification.show("Test case already exists", Notification.Type.WARNING_MESSAGE);
 					}
-					// Open the file for writing.
-					File outputFile = new File(fileLocation + File.separator + filename);
-					fos = new FileOutputStream(outputFile);
-					
+
 				} catch (final java.io.FileNotFoundException e) {
-					//new Notification("Could not open file<br/>", e.getMessage(), Notification.Type.ERROR_MESSAGE)
-					//.show(Page.getCurrent());
+					// new Notification("Could not open file<br/>", e.getMessage(),
+					// Notification.Type.ERROR_MESSAGE)
+					// .show(Page.getCurrent());
 					Notification.show("Could not open file<br/>" + e.getMessage(), Notification.Type.WARNING_MESSAGE);
 					return null;
 				}
 				return fos; // Return the output stream to write to
-				
+
 			}
 			return null;
-
 
 		}
 	};
@@ -184,8 +195,12 @@ public class CustomComponents extends Home {
 
 		@Override
 		public void uploadSucceeded(SucceededEvent event) {
-			
-			Notification.show("File uploaded successfully", Notification.Type.TRAY_NOTIFICATION);
+
+			// Notification.show("File uploaded successfully",
+			// Notification.Type.TRAY_NOTIFICATION);
+			testEngine.createTestSuite(testCase.getValue(), fileName, templateName.getValue(), testCase.getValue());
+
+			getUI().getNavigator().navigateTo(WTEConstants.PROCESSINGVIEW + "/" + testCase.getValue());
 			// System.out.println("uploadSucceeded");
 
 			// outputFile = receiveUpload(inputFile);
@@ -193,5 +208,11 @@ public class CustomComponents extends Home {
 		}
 
 	};
+
+	@Override
+	public void enter(ViewChangeEvent event) {
+		// TODO Auto-generated method stub
+
+	}
 
 }

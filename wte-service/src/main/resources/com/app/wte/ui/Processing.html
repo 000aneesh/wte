@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;GENERATE_GETTERS&quot;:false,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;valo&quot;}">
+  <meta name="vaadin-version" content="8.1.5">
+ </head>
+ <body>
+  <vaadin-grid-layout size-full>
+   <row>
+    <column>
+     <vaadin-label id="processLbl" plain-text _id="processLbl" :middle :center>
+       Process 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="statusLbl" :middle :center>
+       Status 
+     </vaadin-label>
+    </column>
+   </row>
+   <row>
+    <column>
+     <vaadin-label plain-text _id="fileGenLbl" :middle :center>
+       FileGeneration 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-horizontal-layout :middle :center>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7ad" plain-text :middle :center>
+        fail 
+      </vaadin-label>
+      <vaadin-progress-bar icon="fonticon://Vaadin-Icons/e699" :middle :center></vaadin-progress-bar>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7c5" plain-text :middle :center>
+        success 
+      </vaadin-label>
+     </vaadin-horizontal-layout>
+    </column>
+   </row>
+   <row>
+    <column>
+     <vaadin-label size-auto plain-text _id="fTPTransferLbl" :middle :center>
+       FTPTransfer 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-horizontal-layout :middle :center>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7ad" plain-text :middle :center>
+        fail 
+      </vaadin-label>
+      <vaadin-progress-bar icon="fonticon://Vaadin-Icons/e699" :middle :center></vaadin-progress-bar>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7c5" plain-text :middle :center>
+        success 
+      </vaadin-label>
+     </vaadin-horizontal-layout>
+    </column>
+   </row>
+   <row>
+    <column>
+     <vaadin-label size-auto plain-text _id="edge_to_RawLbl" :middle :center>
+       Edge_To_Raw 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-horizontal-layout :middle :center>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7ad" plain-text :middle :center>
+        fail 
+      </vaadin-label>
+      <vaadin-progress-bar icon="fonticon://Vaadin-Icons/e699" :middle :center></vaadin-progress-bar>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7c5" plain-text :middle :center>
+        success 
+      </vaadin-label>
+     </vaadin-horizontal-layout>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="totalRecs_EdgeToRaw" :middle :center>
+       TotalRecords: 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="validRecs_EdgeToRaw" :middle :center>
+       ValidRecords: 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="invalidRecords_EdgeToRaw" :middle :center>
+       InvalidRecords: 
+     </vaadin-label>
+    </column>
+   </row>
+   <row>
+    <column>
+     <vaadin-label size-auto plain-text _id="rAW_To_RA" :middle :center>
+       RAW_To_RA 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-horizontal-layout :middle :center>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7ad" plain-text :middle :center>
+        fail 
+      </vaadin-label>
+      <vaadin-progress-bar icon="fonticon://Vaadin-Icons/e699" :middle :center></vaadin-progress-bar>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7c5" plain-text :middle :center>
+        success 
+      </vaadin-label>
+     </vaadin-horizontal-layout>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="totalRecs_RAWToRA" :middle :center>
+       TotalRecords: 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="validRecs_RawToRa" :middle :center>
+       ValidRecords: 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="invalidRecs_RawToRA" :middle :center>
+       InvalidRecords: 
+     </vaadin-label>
+    </column>
+   </row>
+   <row>
+    <column>
+     <vaadin-label size-auto plain-text _id="rA_to_RAW" :middle :center>
+       RA_To_RAW 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-horizontal-layout :middle :center>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7ad" plain-text :middle :center>
+        fail 
+      </vaadin-label>
+      <vaadin-progress-bar icon="fonticon://Vaadin-Icons/e699" :middle :center></vaadin-progress-bar>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7c5" plain-text :middle :center>
+        success 
+      </vaadin-label>
+     </vaadin-horizontal-layout>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="totalRecs_RAToRaw" :middle :center>
+       TotalRecords: 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="validRecs_RAToRaw" :middle :center>
+       ValidRecords: 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="invalidRecs_RAToRaw" :middle :center>
+       InvalidRecords: 
+     </vaadin-label>
+    </column>
+   </row>
+   <row>
+    <column>
+     <vaadin-label size-auto plain-text _id="rAW_To_R" :middle :center>
+       RAW_To_R 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-horizontal-layout :middle :center>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7ad" plain-text :middle :center>
+        fail 
+      </vaadin-label>
+      <vaadin-progress-bar icon="fonticon://Vaadin-Icons/e699" :middle :center></vaadin-progress-bar>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7c5" plain-text :middle :center>
+        success 
+      </vaadin-label>
+     </vaadin-horizontal-layout>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="totalRecs_RawToR" :middle :center>
+       TotalRecords: 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="validRecs_RawToR" :middle :center>
+       ValidRecords: 
+     </vaadin-label>
+    </column>
+    <column>
+     <vaadin-label plain-text _id="invalidRecs_RawToR" :middle :center>
+       InvalidRecords: 
+     </vaadin-label>
+    </column>
+   </row>
+   <row>
+    <column>
+     <vaadin-button plain-text _id="testSuiteButton" :middle :center>
+       Test Suite 
+     </vaadin-button>
+    </column>
+   </row>
+  </vaadin-grid-layout>
+ </body>
+</html>

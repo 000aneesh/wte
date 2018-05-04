@@ -41,6 +41,9 @@ export class UploadComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean>;
   downloadLink: string;
   templateList: Array<any>;
+  directoriesList: Array<String>;
+  directory:string; 
+  isDirExists:boolean;
  
   constructor(private uploadService: UploadService, private builder: FormBuilder) {
     this.destroy$ = new Subject<boolean>();
@@ -53,6 +56,7 @@ export class UploadComponent implements OnInit, OnDestroy {
     this.uploadForm = this.builder.group({
       testCase: new FormControl(''),
       template: new FormControl(''),
+      directory: new FormControl(''),
       file: new FormData()
     });
 
@@ -65,6 +69,11 @@ export class UploadComponent implements OnInit, OnDestroy {
     },
       (error) => {
       });
+      this.uploadService.getDirectories().subscribe(response => {
+      this.directoriesList = response;
+    },
+      (error) => {
+      });
   }
 
   initTask() {
@@ -74,7 +83,17 @@ export class UploadComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     // this.processProgress.fileUpload = 0;
-    if (this.uploadForm && this.uploadForm.value && this.uploadForm.value.testCase
+    this.isDirExists = false;
+     this.uploadService.getDirectories().subscribe(response => {
+      this.directoriesList = response;
+    },
+      (error) => {
+      });
+    if(this.directoriesList && this.uploadForm.value.testCase){
+    	this.isDirExists=this.directoriesList.includes(this.uploadForm.value.testCase);
+    }
+    
+    if (this.uploadForm && this.uploadForm.value && this.uploadForm.value.testCase && !this.isDirExists
       && this.uploadForm.value.template && this.selectedFiles && this.selectedFiles.item(0)) {
 
       //  this.progress.percentage = 0;
@@ -166,13 +185,10 @@ export class UploadComponent implements OnInit, OnDestroy {
 
         }
       } else {
-        this.processObjct = this.getProcessByName(executionStep);
-        this.processObjct.status = 'ERROR';
-        this.updateProcessList(this.processObjct);
+        // clearInterval(this.timerVar);
       }
     },
       (error) => {// error
-        alert(error);
       },
       () => {// completed
       });
@@ -235,6 +251,19 @@ export class UploadComponent implements OnInit, OnDestroy {
       this.processList.push(processObj);
     }
 
+  }
+   public onChange(event): void {  
+    this.directory =  this.uploadForm.value.directory;      
+  }
+  
+  getProcessingStatus(testCase: string){
+   	this.initTask();
+   	this.testCase=testCase;
+   	this.processList = new Array<Process>();
+   		this.progress = 0;
+        this.processObjct = new Process(this.processNameList[0], 'IN_PROGRESS', 0);
+        this.updateProcessList(this.processObjct);
+        this.getResult(testCase, this.processNameList[0]);
   }
 
 }

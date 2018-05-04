@@ -10,6 +10,7 @@ import java.io.Writer;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -120,14 +121,14 @@ public class WTEUtils {
 							xLvalue[r][c+1] = dataFormatter.formatCellValue(cellVal);
 							
 							inputTestData.put(xLvalue[r][c], xLvalue[r][c+1]);
-							System.out.println("TestData key: "+xLvalue[r][c]+" val: "+xLvalue[r][c+1]+" key: "+key);
+//							System.out.println("TestData key: "+xLvalue[r][c]+" val: "+xLvalue[r][c+1]+" key: "+key);
 						}
 						cellExpVal=row.getCell(c+2);
 						if (cellExpVal != null) {
 							xLvalue[r][c+2] = dataFormatter.formatCellValue(cellExpVal);
 							
 							expectedTestData.put(xLvalue[r][c], xLvalue[r][c+2]);
-							System.out.println("TestData key: "+xLvalue[r][c]+" val: "+xLvalue[r][c+2]+" key: "+key);
+//							System.out.println("TestData key: "+xLvalue[r][c]+" val: "+xLvalue[r][c+2]+" key: "+key);
 						}
 					}
 					
@@ -337,5 +338,9 @@ public class WTEUtils {
 			}
 		}
 		return null;
+	}
+	
+	public static String[] getEnumArray(Class<? extends Enum<?>> e) {
+	    return Arrays.stream(e.getEnumConstants()).map(Enum::name).toArray(String[]::new);
 	}
 }

@@ -11,9 +11,12 @@ import { TestSuiteService } from './test-suite.service';
 export class TestSuiteComponent implements OnInit {
 
   testCase: string;
+  //template: string;
   data: Array<any>;
   modalTitle: string;
-  modalBody: string;
+  testResult: string;
+  resultKeys:  Array<string>;
+  sourcePage: string;
   display = 'none';
 
   constructor(private route: ActivatedRoute, private testSuiteService: TestSuiteService) { }
@@ -21,26 +24,42 @@ export class TestSuiteComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.testCase = params['testCase'];
+      this.sourcePage = params['sourcePage'];
+      console.log(this.testCase);
     });
 
-
-    this.testSuiteService.getTestRecords(this.testCase).subscribe(response => {
-      this.data = JSON.parse(JSON.stringify(response));
-    },
-      (error) => {// error
-      },
-      () => {// completed
-
-      });
+	 if (this.sourcePage === 'processingStatus') {
+	    this.testSuiteService.getTestRecords(this.testCase).subscribe(response => {
+	      this.data = JSON.parse(JSON.stringify(response));
+	    },
+	      (error) => {// error
+	      },
+	      () => {// completed
+	
+	      });
+	   }
+	   if (this.sourcePage === 'history') {
+		    this.testSuiteService.getObjectFromXml(this.testCase).subscribe(response => {
+		      this.data = JSON.parse(JSON.stringify(response));
+		    },
+		      (error) => {// error
+		      },
+		      () => {// completed
+		
+		      });
+	   }
+     
 
   }
-  showDetails(event) {
+  showDetails(event,testCase) {
     this.display = 'block';
     this.modalTitle = 'Details';
-    this.modalBody = 'Geting Details... Please wait...';
-    setTimeout(() => {
-      this.modalBody = 'Data updated';
-    }, 2000);
+    //this.testResult = 'Geting Details... Please wait...';    
+    //alert(JSON.stringify(testCase.testresult.testStatus));
+    //alert( Object.keys(testCase.testresult.testStatus));
+    this.resultKeys=Object.keys(testCase.testresult.testStatus);
+    this.testResult = testCase.testresult.testStatus;
+    
   }
 
   onCloseHandled() {

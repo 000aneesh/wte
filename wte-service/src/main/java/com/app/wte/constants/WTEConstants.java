@@ -10,4 +10,6 @@ public class WTEConstants {
 	// public static final String TEST_INPUT_FILE = "test_input.txt";
 	// public static final String EXCEUTION_STATUS_FILE = "execution-status.xml";
 
+	public static final String HOMEVIEW = "";
+	public static final String PROCESSINGVIEW = "processing";
 }

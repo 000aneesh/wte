@@ -21,7 +21,7 @@
             <td>{{item.testCaseDescription}}</td>
             <td class="text-right">{{item.status}}</td>
             <td>
-                <fa [name]="'file'" [size]=1 title="Details" (click)="showDetails($event)"></fa>
+                <fa [name]="'file'" [size]=1 title="Details" (click)="showDetails($event,item)"></fa>
                 <!-- <span (click)="showDetails($event)" class="btn btn-sm btn-default">Details</span> -->
             </td>
 
@@ -47,8 +47,21 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <p>{{modalBody}}</p>
+            <div class="modal-body">                
+                <table>
+                  	<thead>
+	        			<tr>
+	        				<th style="width: 50%">Key</th>
+	        				<th style="width: 50%">Status</th>
+	        			</tr>
+        			</thead>
+        			<tbody>
+	        			<tr *ngFor="let key of resultKeys;">
+	        				<td>{{key}}</td>
+	        				<td>{{testResult[key]}}</td>
+	        			</tr> 
+        			</tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" (click)="onCloseHandled()">Close</button>

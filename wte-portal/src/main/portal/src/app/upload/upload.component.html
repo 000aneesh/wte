@@ -1,11 +1,12 @@
 <form class="form-horizontal" [formGroup]="uploadForm">
 	<tabset type="pills" #uploadTabs>
 		<tab heading="Test Details" id="tab1">
+		
 			<table>
 				<tr>
 					<td>Test Case Name</td>
 					<td>
-						<input type="text" formControlName="testCase" />
+						<input type="text" formControlName="testCase" /> <span [style.visibility]="(!isDirExists) ? 'hidden' : 'visible' " [style.color]="'red'">TestCase already exists, please rename</span>
 					</td>
 				</tr>
 
@@ -71,7 +72,26 @@
 				</tr>
 
 			</table>
-			<button *ngIf="lastProcessStatus === 'COMPLETED'" type="button" [routerLink]="['/testSuite', testCase]">Test Suite</button>
+			<button *ngIf="lastProcessStatus === 'COMPLETED'" type="button" [routerLink]="['/testSuite', testCase,'processingStatus']">Test Suite</button>
+		</tab>
+		<tab heading="History" id="tab3">
+			<table>
+				<tr>
+					<td>TestResult Folder</td>
+					<td>
+						<select formControlName="directory" name="directory" (change)="onChange($event)">
+							<option selected="" value="">Select One</option>
+							<option [ngValue]="directory" *ngFor="let directory of directoriesList">{{directory}}</option>
+						</select>
+						
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button type="button" (click)="getProcessingStatus(directory);">Submit</button>
+					</td>
+				</tr>
+			</table>
 		</tab>
 	</tabset>
 </form>

@@ -40,6 +40,10 @@ export class UploadService {
   getTemplates(): Observable<any> {
     return this.http.get('/getTemplates');
   }
+  
+   getDirectories(): Observable<any> {
+    return this.http.get('/getDirectories');
+  }
 
   getResult(testCase: string, executionStep: string) {
     return this.http.get('/getResult?testCase=' + testCase + '&executionStep=' + executionStep);
