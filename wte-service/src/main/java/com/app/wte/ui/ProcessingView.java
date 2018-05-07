@@ -17,12 +17,16 @@ import com.app.wte.util.WTEUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.SpringView;
 
 @SuppressWarnings("serial")
-@SpringComponent
-@Scope("prototype")
+/*@SpringComponent
+@Scope("prototype")*/
+@SpringView(name = ProcessingView.VIEW_PATH)
 public class ProcessingView extends Processing implements View {
 
+	public static final String VIEW_PATH = "processing";
+	
 	public ProcessingView() {
 	}
 

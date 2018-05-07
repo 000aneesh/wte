@@ -1,0 +1,181 @@
+package com.app.wte.ui;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Collection;
+import java.util.Locale;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+
+import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Binder;
+import com.vaadin.data.Result;
+import com.vaadin.data.StatusChangeEvent;
+import com.vaadin.data.ValueContext;
+import com.vaadin.data.converter.StringToIntegerConverter;
+import com.vaadin.navigator.Navigator;
+import com.vaadin.server.Page;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.navigator.SpringViewProvider;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.ItemCaptionGenerator;
+import com.vaadin.ui.UI;
+
+/**
+ * A form for editing a single product.
+ *
+ * Using responsive layouts, the form can be displayed either sliding out on the
+ * side of the view or filling the whole screen - see the theme for the related
+ * CSS rules.
+ */
+@SpringComponent
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class ProductForm extends ProductFormDesign {
+
+    private SampleCrudLogic viewLogic;
+    private final Binder<Product> binder = new BeanValidationBinder<>(Product.class);
+
+
+    @Autowired
+    private SpringViewProvider viewProvider;
+
+    @SpringComponent
+    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public static class ProductFormFactory {
+
+        @Autowired
+        private ApplicationContext context;
+
+        public ProductForm createForm(SampleCrudLogic logic) {
+            ProductForm form = context.getBean(ProductForm.class);
+            form.init(logic);
+            return form;
+        }
+    }
+
+    private static class StockPriceConverter extends StringToIntegerConverter {
+
+        public StockPriceConverter() {
+            super("Could not convert value to " + Integer.class.getName());
+        }
+
+        @Override
+        protected NumberFormat getFormat(Locale locale) {
+            // do not use a thousands separator, as HTML5 input type
+            // number expects a fixed wire/DOM number format regardless
+            // of how the browser presents it to the user (which could
+            // depend on the browser locale)
+            DecimalFormat format = new DecimalFormat();
+            format.setMaximumFractionDigits(0);
+            format.setDecimalSeparatorAlwaysShown(false);
+            format.setParseIntegerOnly(true);
+            format.setGroupingUsed(false);
+            return format;
+        }
+
+        @Override
+        public Result<Integer> convertToModel(String value,
+                ValueContext context) {
+            Result<Integer> result = super.convertToModel(value, context);
+            return result.map(stock -> stock == null ? 0 : stock);
+        }
+
+    }
+
+    private Product currentProduct;
+
+    private ProductForm() {
+    }
+
+    public void setCategories(Collection<Category> categories) {
+        category.setItems(categories);
+    }
+
+    public void editProduct(Product product) {
+        currentProduct = product;
+        setUpData();
+
+        delete.setEnabled(product != null && product.getId() != -1);
+
+        // Scroll to the top
+        // As this is not a Panel, using JavaScript
+        String scrollScript = "window.document.getElementById('" + getId()
+                + "').scrollTop = 0;";
+        Page.getCurrent().getJavaScript().execute(scrollScript);
+    }
+
+    @PostConstruct
+    private void init() {
+        addStyleName("product-form");
+
+        availability.setItems(Availability.values());
+
+        binder.forField(price).withConverter(new EuroConverter()).bind("price");
+        binder.forField(productName).bind("productName");
+
+        binder.forField(availability).bind("availability");
+
+        save.addClickListener(event -> onSave());
+
+        cancel.addClickListener(event -> viewLogic.cancelProduct());
+        delete.addClickListener(event -> onDelete());
+        discard.addClickListener(event -> setUpData());
+
+        ItemCaptionGenerator<Category> itemCaptionGenerator = new ItemCaptionGenerator<Category>() {
+			
+			@Override
+			public String apply(Category item) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+        		
+        category.setItemCaptionGenerator(itemCaptionGenerator/*Category::getName*/);
+        binder.forField(category).bind("category");
+        binder.forField(stockCount).withConverter(new StockPriceConverter())
+                .bind("stockCount");
+
+        binder.addStatusChangeListener(this::updateButtons);
+    }
+
+    private void onSave() {
+    	MainUI ui= MainUI.get();
+    	ui.navigateTo(ProcessingView.VIEW_PATH);
+        
+        if (binder.writeBeanIfValid(currentProduct)) {
+            viewLogic.saveProduct(currentProduct);
+        }
+    }
+
+    private void onDelete() {
+        if (currentProduct != null) {
+            viewLogic.deleteProduct(currentProduct);
+        }
+    }
+
+    private void init(SampleCrudLogic logic) {
+        viewLogic = logic;
+    }
+
+    private void updateButtons(StatusChangeEvent event) {
+        boolean changes = event.getBinder().hasChanges();
+        boolean validationErrors = event.hasValidationErrors();
+
+        save.setEnabled(!validationErrors && changes);
+        discard.setEnabled(changes);
+    }
+
+    private void setUpData() {
+        if (currentProduct != null) {
+            binder.readBean(currentProduct);
+        } else {
+            binder.removeBean();
+        }
+    }
+
+}

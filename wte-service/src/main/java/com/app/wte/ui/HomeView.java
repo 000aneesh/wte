@@ -21,6 +21,7 @@ import com.app.wte.util.ConfigurationComponent;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.FailedEvent;
@@ -32,10 +33,15 @@ import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 
-@SuppressWarnings("serial")
+/*
 @SpringComponent
-@Scope("prototype")
+@Scope("prototype")*/
+@SuppressWarnings("serial")
+@SpringView(name = HomeView.VIEW_PATH)
 public class HomeView extends Home implements View {
+	
+	public static final String VIEW_NAME = "HOME";
+	public static final String VIEW_PATH = "home";
 
 	@Value("${upload-path}")
 	private String uploadPath;
