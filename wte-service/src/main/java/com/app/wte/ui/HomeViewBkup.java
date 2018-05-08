@@ -7,37 +7,22 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 
 import com.app.wte.constants.WTEConstants;
 import com.app.wte.testengine.TestEngine;
 import com.app.wte.util.ConfigurationComponent;
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.Binder;
-import com.vaadin.data.Result;
-import com.vaadin.data.StatusChangeEvent;
-import com.vaadin.data.ValueContext;
-import com.vaadin.data.converter.StringToIntegerConverter;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.server.Page;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.ItemCaptionGenerator;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.FailedEvent;
 import com.vaadin.ui.Upload.FinishedEvent;
@@ -48,21 +33,17 @@ import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 
-/**
- * A form for editing a single product.
- *
- * Using responsive layouts, the form can be displayed either sliding out on the
- * side of the view or filling the whole screen - see the theme for the related
- * CSS rules.
- */
+/*
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class HomeForm extends Home {
+@Scope("prototype")*/
+@SuppressWarnings("serial")
+@SpringView(name = HomeViewBkup.VIEW_PATH)
+public class HomeViewBkup extends Home implements View {
+	
+	public static final String VIEW_NAME = "HOME";
+	public static final String VIEW_PATH = "home";
 
-    private TestCaseLogic viewLogic;
-    private final Binder<TestCaseUI> binder = new BeanValidationBinder<>(TestCaseUI.class);
-
-    @Value("${upload-path}")
+	@Value("${upload-path}")
 	private String uploadPath;
 
 	@Autowired
@@ -70,105 +51,26 @@ public class HomeForm extends Home {
 
 	@Autowired
 	TestEngine testEngine;
-	
+
+	public HomeViewBkup() {
+
+	}
+
 	private String fileName;
 
-    @Autowired
-    private SpringViewProvider viewProvider;
-
-    @SpringComponent
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public static class HomeFormFactory {
-
-        @Autowired
-        private ApplicationContext context;
-
-        public HomeForm createForm(TestCaseLogic logic) {
-            HomeForm form = context.getBean(HomeForm.class);
-            form.init(logic);
-            return form;
-        }
-    }
-    
-    private TestCaseUI currentProduct;
-
-    private HomeForm() {
-    }
-
-    public void editProduct(TestCaseUI product) {
-        currentProduct = product;
-        setUpData();
-
-        delete.setEnabled(product != null && product.getId() != -1);
-
-        // Scroll to the top
-        // As this is not a Panel, using JavaScript
-        String scrollScript = "window.document.getElementById('" + getId()
-                + "').scrollTop = 0;";
-        Page.getCurrent().getJavaScript().execute(scrollScript);
-    }
-
-    @PostConstruct
-    private void init() throws IOException {
-        addStyleName("product-form");
-
-        List<String> templatesList = confComponent.getTemplates();
+	@PostConstruct
+	public void init() throws IOException {
+		List<String> templatesList = confComponent.getTemplates();
 		// templatesList.add(0, "Select One");
 		templateName.setPlaceholder("Select One");
 		templateName.setItems(templatesList);
 		templateName.setEmptySelectionAllowed(false);
+		// templateName.
+		upload();
 
-        binder.forField(testCase).bind("testCase");
+	}
 
-        binder.forField(templateName).bind("templateName");
-
-        save.addClickListener(event -> onSave());
-
-        cancel.addClickListener(event -> viewLogic.cancelProduct());
-        delete.addClickListener(event -> onDelete());
-        discard.addClickListener(event -> setUpData());
-        	
-        binder.addStatusChangeListener(this::updateButtons);
-        
-        upload();
-    }
-
-    private void onSave() {
-    	MainUI ui= MainUI.get();
-    	ui.navigateTo(ProcessingView.VIEW_PATH);
-        
-        if (binder.writeBeanIfValid(currentProduct)) {
-            //viewLogic.saveProduct(currentProduct);
-        }
-    }
-
-    private void onDelete() {
-        if (currentProduct != null) {
-            //viewLogic.deleteProduct(currentProduct);
-        }
-    }
-
-    private void init(TestCaseLogic logic) {
-        viewLogic = logic;
-    }
-
-    private void updateButtons(StatusChangeEvent event) {
-        boolean changes = event.getBinder().hasChanges();
-        boolean validationErrors = event.hasValidationErrors();
-
-        save.setEnabled(!validationErrors && changes);
-        discard.setEnabled(changes);
-    }
-
-    private void setUpData() {
-        if (currentProduct != null) {
-            binder.readBean(currentProduct);
-        } else {
-            binder.removeBean();
-        }
-    }
-    
-    private void upload() {
+	private void upload() {
 
 		upload.setReceiver(receiver);
 		upload.setImmediateMode(false);
@@ -209,8 +111,30 @@ public class HomeForm extends Home {
 			@Override
 			public void uploadFinished(FinishedEvent event) {
 
+				// downloadBtn.setVisible(true);
+				// StreamResource myResource = createResource();
+				// FileDownloader fileDownloader = new FileDownloader(myResource);
+				// fileDownloader.extend(downloadBtn);
 			}
 
+			// private StreamResource createResource() {
+			//
+			// return new StreamResource(new StreamSource() {
+			// @Override
+			// public InputStream getStream() {
+			// try {
+			// return new FileInputStream(outputFile);
+			// } catch (FileNotFoundException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+			// return null;
+			//
+			// }
+			//
+			// }, "CPWorkBookOut.xlsx");
+			//
+			// }
 		});
 
 		upload.addFailedListener(new Upload.FailedListener() {
@@ -258,6 +182,9 @@ public class HomeForm extends Home {
 					}
 
 				} catch (final java.io.FileNotFoundException e) {
+					// new Notification("Could not open file<br/>", e.getMessage(),
+					// Notification.Type.ERROR_MESSAGE)
+					// .show(Page.getCurrent());
 					Notification.show("Could not open file<br/>" + e.getMessage(), Notification.Type.WARNING_MESSAGE);
 					return null;
 				}
@@ -275,12 +202,23 @@ public class HomeForm extends Home {
 		@Override
 		public void uploadSucceeded(SucceededEvent event) {
 
+			// Notification.show("File uploaded successfully",
+			// Notification.Type.TRAY_NOTIFICATION);
 			testEngine.createTestSuite(testCase.getValue(), fileName, templateName.getValue(), testCase.getValue());
 
 			getUI().getNavigator().navigateTo(WTEConstants.PROCESSINGVIEW + "/" + testCase.getValue());
+			// System.out.println("uploadSucceeded");
+
+			// outputFile = receiveUpload(inputFile);
 
 		}
 
 	};
+
+	@Override
+	public void enter(ViewChangeEvent event) {
+		// TODO Auto-generated method stub
+
+	}
 
 }

@@ -19,6 +19,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
 
+@SuppressWarnings("serial")
 @Viewport("user-scalable=no,initial-scale=1.0")
 @Theme("mytheme")
 @SpringUI
@@ -88,9 +89,9 @@ public class MainUI extends UI{
 
         menu = new Menu(navigator);
         // View are registered automatically by Vaadin Spring support
-        menu.addViewButton(HomeView.VIEW_PATH, HomeView.VIEW_NAME,
+        menu.addViewButton(HomeViewBkup.VIEW_PATH, HomeViewBkup.VIEW_NAME,
                 VaadinIcons.EDIT);
-        menu.addViewButton(HomeView.VIEW_PATH, HomeView.VIEW_NAME,
+        menu.addViewButton(HomeViewBkup.VIEW_PATH, HomeViewBkup.VIEW_NAME,
                 VaadinIcons.INFO_CIRCLE);
         menu.addViewButton(TestCaseView.VIEW_PATH, TestCaseView.VIEW_NAME, VaadinIcons.EXTERNAL_LINK);
         

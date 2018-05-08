@@ -2,10 +2,10 @@ package com.app.wte.ui;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@SuppressWarnings("serial")
 public class TestCaseUI implements Serializable {
 
     @NotNull
@@ -18,8 +18,6 @@ public class TestCaseUI implements Serializable {
 
 //    private Set<String> templateName = new HashSet<>();
 
-    @Min(value = 0, message = "Can't have negative amount in stock")
-    private int stockCount = 0;
     @NotNull
     private String templateName;
 
@@ -43,14 +41,6 @@ public class TestCaseUI implements Serializable {
     public void setTemplateName(Set<String> templateName) {
         this.templateName = templateName;
     }*/
-
-    public int getStockCount() {
-        return stockCount;
-    }
-
-    public void setStockCount(int stockCount) {
-        this.stockCount = stockCount;
-    }
 
     public String getTemplateName() {
         return templateName;

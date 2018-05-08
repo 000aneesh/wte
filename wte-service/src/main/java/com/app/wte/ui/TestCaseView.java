@@ -4,7 +4,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.app.wte.ui.HomeForm.HomeFormFactory;
+import com.app.wte.ui.HomeView.HomeFormFactory;
 import com.app.wte.ui.TestCaseLogic.TestCaseLogicFactory;
 import com.vaadin.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.icons.VaadinIcons;
@@ -27,6 +27,7 @@ import com.vaadin.ui.themes.ValoTheme;
  * See also {@link TestCaseLogic} for fetching the data, the actual CRUD
  * operations and controlling the view based on events from outside.
  */
+@SuppressWarnings("serial")
 @SpringView(name = TestCaseView.VIEW_PATH)
 public class TestCaseView extends CssLayout implements View {
 
@@ -39,7 +40,7 @@ public class TestCaseView extends CssLayout implements View {
 
 	private ProductGrid grid;
 
-	private HomeForm form;
+	private HomeView form;
 
 	private TestCaseLogic viewLogic;
 

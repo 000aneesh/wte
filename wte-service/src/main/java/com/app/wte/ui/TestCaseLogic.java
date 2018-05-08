@@ -19,6 +19,7 @@ import com.vaadin.spring.annotation.SpringComponent;
  * the system separately, and to e.g. provide alternative views for the same
  * data.
  */
+@SuppressWarnings("serial")
 @SpringComponent
 public class TestCaseLogic implements Serializable {
 
@@ -65,7 +66,7 @@ public class TestCaseLogic implements Serializable {
 		}
 
 		Page page = MainUI.get().getPage();
-		page.setUriFragment("!" + TestCaseView.VIEW_NAME + "/" + fragmentParameter, false);
+		page.setUriFragment("!" + TestCaseView.VIEW_PATH + "/" + fragmentParameter, false);
 	}
 
 	public void enter(String productId) {
