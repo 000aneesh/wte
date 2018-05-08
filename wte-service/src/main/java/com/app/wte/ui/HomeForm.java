@@ -89,36 +89,7 @@ public class HomeForm extends Home {
             return form;
         }
     }
-
-    private static class StockPriceConverter extends StringToIntegerConverter {
-
-        public StockPriceConverter() {
-            super("Could not convert value to " + Integer.class.getName());
-        }
-
-        @Override
-        protected NumberFormat getFormat(Locale locale) {
-            // do not use a thousands separator, as HTML5 input type
-            // number expects a fixed wire/DOM number format regardless
-            // of how the browser presents it to the user (which could
-            // depend on the browser locale)
-            DecimalFormat format = new DecimalFormat();
-            format.setMaximumFractionDigits(0);
-            format.setDecimalSeparatorAlwaysShown(false);
-            format.setParseIntegerOnly(true);
-            format.setGroupingUsed(false);
-            return format;
-        }
-
-        @Override
-        public Result<Integer> convertToModel(String value,
-                ValueContext context) {
-            Result<Integer> result = super.convertToModel(value, context);
-            return result.map(stock -> stock == null ? 0 : stock);
-        }
-
-    }
-
+    
     private TestCaseUI currentProduct;
 
     private HomeForm() {
@@ -156,15 +127,6 @@ public class HomeForm extends Home {
         cancel.addClickListener(event -> viewLogic.cancelProduct());
         delete.addClickListener(event -> onDelete());
         discard.addClickListener(event -> setUpData());
-
-        ItemCaptionGenerator<Category> itemCaptionGenerator = new ItemCaptionGenerator<Category>() {
-			
-			@Override
-			public String apply(Category item) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
         	
         binder.addStatusChangeListener(this::updateButtons);
         
