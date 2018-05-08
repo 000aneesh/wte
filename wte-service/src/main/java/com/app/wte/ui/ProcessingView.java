@@ -50,40 +50,62 @@ public class ProcessingView extends Processing implements View {
 			String testCase = params[0];
 			System.out.println("testCase : " + testCase);
 
-			//String[] executionSteps = WTEUtils.getEnumArray(ExecutionStepType.class);
+			// String[] executionSteps = WTEUtils.getEnumArray(ExecutionStepType.class);
 			// String executionStep = executionSteps[0];
-			updateStatus(testCase);
+			try {
+				updateStatus(testCase);
+			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
-	public void updateStatus(String testCase) {
+	public void updateStatus(String testCase)
+			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 
-		String[] executionSteps = WTEUtils.getEnumArray(ExecutionStepType.class);
-
-		for (String executionStep : executionSteps) {
+	//	String[] executionSteps = WTEUtils.getEnumArray(ExecutionStepType.class);
+		// progressBar0.setValue(0.0f);
+		int index = 0;
+		for (ExecutionStepType executionStepType : ExecutionStepType.values()) {
+			String executionStep = executionStepType.getExecutionStep();
+			// ProcessingView.class.getField("progressBar" + index).setFloat(this, 0.0f);
+			progressBar0.setValue(0.0f);
 			ExecutionStatusType resultStatus = getResult(testCase, executionStep);
-			System.out.println("1 resultStatus: " + resultStatus + " testCase: " + testCase + " executionStep: " + executionStep);
+			System.out.println(
+					"1 resultStatus: " + resultStatus + " testCase: " + testCase + " executionStep: " + executionStep);
 			while (ExecutionStatusType.IN_PROGRESS.equals(resultStatus)) {
-
+//				Float current = ProcessingView.class.getField("progressBar" + index).getFloat(this);
+				float current = progressBar0.getValue();
+				if (current < 1.0f) {
+					// ProcessingView.class.getField("progressBar" + index).setFloat(this, current +
+					// 0.10f);
+					progressBar0.setValue(current + 0.10f);
+				}
 				try {
 					Thread.sleep(1000);
 					resultStatus = getResult(testCase, executionStep);
-					System.out.println("2 resultStatus: " + resultStatus + " testCase: " + testCase + " executionStep: " + executionStep);
+					System.out.println("2 resultStatus: " + resultStatus + " testCase: " + testCase + " executionStep: "
+							+ executionStep);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 
 			}
-			
-			if(ExecutionStatusType.COMPLETED.equals(resultStatus)) {
+
+			if (ExecutionStatusType.COMPLETED.equals(resultStatus)) {
+			//	Processing.class.getField("progressBar" + index).setFloat(this, 1.0f);
+				progressBar0.setValue(1.0f);
 				ProcessValidationResult processValidationResult = getResultDetails(testCase, executionStep);
-				System.out.println("3 resultStatus: " + resultStatus + " testCase: " + testCase + " executionStep: " + executionStep + " processValidationResult : " + processValidationResult);
-				
-			}else if(ExecutionStatusType.ERROR.equals(resultStatus)) {
-				System.out.println("4 resultStatus: " + resultStatus + " testCase: " + testCase + " executionStep: " + executionStep);
+				System.out.println("3 processValidationResult: " + resultStatus + " testCase: " + testCase
+						+ " executionStep: " + executionStep + " processValidationResult : " + processValidationResult);
+
+			} else if (ExecutionStatusType.ERROR.equals(resultStatus)) {
+				System.out.println("4 resultStatus: " + resultStatus + " testCase: " + testCase + " executionStep: "
+						+ executionStep);
 				break;
 			}
-
+			index++;
 		}
 
 	}

@@ -4,7 +4,7 @@ public enum ExecutionStepType {
 	
 	FileGeneration("FileGeneration"),
 	FTPTransfer("FTPTransfer"),
-	Verification("Verification"),
+	/*Verification("Verification"),*/
 	ProcessValidationEdgeToRaw("EDGE_TO_RAW"),
 	ProcessValidationRawToRA("Raw_To_RA"),
 	ProcessValidationRAToRaw("RA_TO_RAW"),

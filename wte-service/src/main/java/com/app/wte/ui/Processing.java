@@ -5,6 +5,7 @@ import com.vaadin.annotations.DesignRoot;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.declarative.Design;
 
 /** 
@@ -22,20 +23,26 @@ public class Processing extends GridLayout {
 	protected Label processLbl;
 	protected Label statusLbl;
 	protected Label fileGenLbl;
+	protected ProgressBar progressBar0;
 	protected Label fTPTransferLbl;
+	protected ProgressBar progressBar1;
 	protected Label edge_to_RawLbl;
+	protected ProgressBar progressBar2;
 	protected Label totalRecs_EdgeToRaw;
 	protected Label validRecs_EdgeToRaw;
 	protected Label invalidRecords_EdgeToRaw;
 	protected Label rAW_To_RA;
+	protected ProgressBar progressBar3;
 	protected Label totalRecs_RAWToRA;
 	protected Label validRecs_RawToRa;
 	protected Label invalidRecs_RawToRA;
 	protected Label rA_to_RAW;
+	protected ProgressBar progressBar4;
 	protected Label totalRecs_RAToRaw;
 	protected Label validRecs_RAToRaw;
 	protected Label invalidRecs_RAToRaw;
 	protected Label rAW_To_R;
+	protected ProgressBar progressBar5;
 	protected Label totalRecs_RawToR;
 	protected Label validRecs_RawToR;
 	protected Label invalidRecs_RawToR;
