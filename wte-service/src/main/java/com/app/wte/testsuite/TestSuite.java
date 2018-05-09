@@ -21,6 +21,10 @@ public abstract class TestSuite implements Runnable {
 	@Autowired
 	@Qualifier("dBValidationStep")
 	TestExecutionStep dBValidationStep;
+	
+	@Autowired
+	@Qualifier("dataVerificationStep")
+	TestExecutionStep dataVerificationStep;
 
 	ExecutionContext executionContext;
 

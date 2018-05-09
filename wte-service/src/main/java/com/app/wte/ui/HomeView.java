@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -23,14 +23,9 @@ import com.app.wte.util.ConfigurationComponent;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.data.StatusChangeEvent;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.FailedEvent;
 import com.vaadin.ui.Upload.FinishedEvent;
@@ -40,7 +35,6 @@ import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
-import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * A form for editing a single product.
@@ -107,7 +101,7 @@ public class HomeView extends Home {
     private void init() throws IOException {
         addStyleName("product-form");
 
-        List<String> templatesList = confComponent.getTemplates();
+        Set<String> templatesList = confComponent.getTemplates();
 		// templatesList.add(0, "Select One");
 		templateName.setPlaceholder("Select One");
 		templateName.setItems(templatesList);

@@ -2,6 +2,7 @@ package com.app.wte.step;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.app.wte.model.ExecutionContext;
 import com.app.wte.type.ExecutionStatusType;
 import com.app.wte.type.ExecutionStepType;
+import com.app.wte.util.ConfigurationComponent;
 import com.app.wte.util.WTEUtils;
 
 @Service(value="fileGenerationStep")
@@ -23,10 +25,17 @@ public class FileGenerationStep implements TestExecutionStep {
 	
 	ExecutionStepType executionTaskType=ExecutionStepType.FileGeneration;
 	
+	@Autowired
+	ConfigurationComponent confComponent;
+	
 	@Override
 	public void execute(ExecutionContext executionContext) {
 		try {
-			
+			Map<String, String> configData = null;
+			if(confComponent.getConfigDataMap() != null){
+				configData = confComponent.getConfigDataMap().get(executionContext.getTemplateKey());
+				executionContext.setConfigDataMap(configData);
+			}
 			WTEUtils.readFromExcel(executionContext,uploadPath,templatePath);
 			
 		} catch (FileNotFoundException e) {
@@ -49,7 +58,7 @@ public class FileGenerationStep implements TestExecutionStep {
 	public void preprocess(ExecutionContext executionContext) {
 		// TODO 
 		 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.IN_PROGRESS);
-		 WTEUtils.jaxbObjectToXML(executionContext,uploadPath,"");
+		// WTEUtils.jaxbObjectToXML(executionContext,uploadPath,"");
 		
 	}
 

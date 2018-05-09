@@ -26,6 +26,7 @@ public class ConsumerTestSuite extends TestSuite {
 		taskList.add(fileGenerationStep);
 		taskList.add(fTPTransferStep);
 		taskList.add(dBValidationStep);
+		taskList.add(dataVerificationStep);
 	}
 	
 	@Override
@@ -35,7 +36,7 @@ public class ConsumerTestSuite extends TestSuite {
 		for(TestExecutionStep task:taskList){
 			task.preprocess(executionContext);
 			task.execute(executionContext);	
-			task.postProcess(executionContext); 
+			task.postProcess(executionContext);
 		}
 		
 	}

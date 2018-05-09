@@ -1,8 +1,10 @@
 package com.app.wte.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,6 +25,8 @@ public class ExecutionContext {
 		String templateKey;
 		
 		String resultFolderName;
+		
+		Map<String, String> configDataMap=new HashMap<String, String>();
 
 		LinkedHashMap<ExecutionStepType,ExecutionStatusType> taskSatusMap = new LinkedHashMap<ExecutionStepType,ExecutionStatusType>();
 		
@@ -69,6 +73,14 @@ public class ExecutionContext {
 		public void setResultFolderName(String resultFolderName) {
 			this.resultFolderName = resultFolderName;
 		}
+		
+		public Map<String, String> getConfigDataMap() {
+			return configDataMap;
+		}
+
+		public void setConfigDataMap(Map<String, String> configDataMap) {
+			this.configDataMap = configDataMap;
+		}
 
 		public LinkedHashMap<ExecutionStepType, ProcessValidationResult> getTaskSatusDetailsMap() {
 			return taskSatusDetailsMap;
@@ -85,6 +97,6 @@ public class ExecutionContext {
 		public void setTestRecordList(List<TestRecord> testRecordList) {
 			this.testRecordList = testRecordList;
 		}
-		
+
 }
 

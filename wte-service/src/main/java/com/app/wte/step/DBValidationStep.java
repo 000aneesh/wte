@@ -15,6 +15,7 @@ import com.app.wte.model.ExecutionContext;
 import com.app.wte.model.ProcessValidationResult;
 import com.app.wte.type.ExecutionStatusType;
 import com.app.wte.type.ExecutionStepType;
+import com.app.wte.util.ConfigurationComponent;
 import com.app.wte.util.WTEUtils;
 
 @Service(value="dBValidationStep")
@@ -34,7 +35,8 @@ public class DBValidationStep implements TestExecutionStep {
 	@Override
 	public void execute(ExecutionContext executionContext) {
 		DBValidationResponse dbValidationResponse=null;
-		String inputFile=executionContext.getResultFolderName()+".txt";
+		
+		String inputFile=executionContext.getConfigDataMap().get("templatePattern")+executionContext.getResultFolderName()+".txt";
 			try {
 				/*while(size<=4){
 					 dbValidationResponse=dBValidationDao.getStageOfSourceFile(inputFile);
@@ -74,7 +76,7 @@ public class DBValidationStep implements TestExecutionStep {
 		 WTEUtils.updateStatus(executionContext, ExecutionStepType.ProcessValidationRawToRA, ExecutionStatusType.IN_PROGRESS);
 		 WTEUtils.updateStatus(executionContext, ExecutionStepType.ProcessValidationRAToRaw, ExecutionStatusType.IN_PROGRESS);
 		 WTEUtils.updateStatus(executionContext, ExecutionStepType.ProcessValidationRawToR, ExecutionStatusType.IN_PROGRESS);
-		 WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");
+		 //WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");
 		
 	}
 

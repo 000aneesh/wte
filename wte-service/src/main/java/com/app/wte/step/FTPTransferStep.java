@@ -3,6 +3,7 @@ package com.app.wte.step;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.app.wte.model.ExecutionContext;
 import com.app.wte.type.ExecutionStatusType;
 import com.app.wte.type.ExecutionStepType;
+import com.app.wte.util.ConfigurationComponent;
 import com.app.wte.util.WTEUtils;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
@@ -38,13 +40,15 @@ public class FTPTransferStep implements TestExecutionStep {
 	private String password;
 	
 	ExecutionStepType executionTaskType=ExecutionStepType.FTPTransfer;
+	
 
 	@Override
 	public void execute(ExecutionContext executionContext) {
 		try {
-			 File sourceFile = new File(uploadPath + File.separator +executionContext.getResultFolderName()+File.separator+"TestData"
-			 			+File.separator+executionContext.getResultFolderName()+".txt");
-			 File destFile = new File(ftpFilePath+File.separator+executionContext.getResultFolderName()+".txt");
+			
+			 File sourceFile = new File(uploadPath + File.separator +executionContext.getTestCase()+File.separator+"TestData"
+			 			+File.separator+executionContext.getConfigDataMap().get("templatePattern")+executionContext.getResultFolderName()+".txt");
+			 File destFile = new File(ftpFilePath+"/"+executionContext.getConfigDataMap().get("templatePattern")+executionContext.getResultFolderName()+".txt");
 			 Files.copy(sourceFile.toPath(), destFile.toPath());
 			//WTEUtils.copyToServer(executionContext,uploadPath,ftpFilePath,host,port,userName,password);
 			
@@ -72,7 +76,7 @@ public class FTPTransferStep implements TestExecutionStep {
 	public void preprocess(ExecutionContext executionContext) {
 		// TODO 
 		 WTEUtils.updateStatus(executionContext, this.executionTaskType, ExecutionStatusType.IN_PROGRESS);
-		 WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");	
+		 //WTEUtils.jaxbObjectToXML(executionContext,uploadPath, "");	
 		
 	}
 

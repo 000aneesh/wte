@@ -1,5 +1,11 @@
 package com.app.wte.daoImpl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.app.wte.dao.DBValidationDao;
@@ -25,7 +31,9 @@ public class DBValidationDaoImpl implements DBValidationDao {
 
 		try {						
 					if (str != null) {
-						String qry="select FILE_NAME, EFID, CLIENT_NAME, SOURCE_PATH, STAGE_NAME from TBL_AUDIT_UHG where FILE_NAME='"+ str + "'";
+						String qry="select FILE_NAME, EFID, CLIENT_NAME, SOURCE_PATH, STAGE_NAME, STATUS, TOTAL_RECORDS_COUNT, "
+								+ "VALID_RECORDS_COUNT, INVALID_RECORDS_COUNT, EDGE_NODE_FILE_ARRIVAL_TIMESTAMP, RULE_VERSION, "
+								+ "IS_COMPRESSED, PROCESSED_TIMESTAMP, PROCESSED_USER_ID from TBL_AUDIT_UHG where FILE_NAME='"+ str + "'";
 						resultList=namedParameterJdbcTemplate.queryForList(qry,Collections.EMPTY_MAP);
 					}
 					dbValidationResponse.setResultList(resultList);

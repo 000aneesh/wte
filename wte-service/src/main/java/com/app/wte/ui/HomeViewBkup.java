@@ -7,20 +7,18 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 
 import com.app.wte.constants.WTEConstants;
 import com.app.wte.testengine.TestEngine;
 import com.app.wte.util.ConfigurationComponent;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Upload;
@@ -60,7 +58,7 @@ public class HomeViewBkup extends Home implements View {
 
 	@PostConstruct
 	public void init() throws IOException {
-		List<String> templatesList = confComponent.getTemplates();
+		Set<String> templatesList = confComponent.getTemplates();
 		// templatesList.add(0, "Select One");
 		templateName.setPlaceholder("Select One");
 		templateName.setItems(templatesList);

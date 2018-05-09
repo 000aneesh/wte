@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.app.wte.model.ExecutionResult;
 import com.app.wte.testsuite.TestSuite;
+import com.app.wte.util.TestResultComponent;
 import com.app.wte.model.ExecutionContext;
 
 @Component
@@ -27,6 +28,9 @@ public class TestEngine {
 	
 	@Autowired
 	private ApplicationContext applicationContext;
+	
+	@Autowired
+	TestResultComponent testResultComponent;
 	
 	@Value("${upload-path}")
 	private String uploadPath;
@@ -56,6 +60,7 @@ public class TestEngine {
 		//executionContext.setResultFolderName(uploadPath+File.separator+resultFolderName);
 		
 		testSuite.setExecutionContext(executionContext);
+		testResultComponent.getDirectoryNames().add(testCase);
 		
 		taskExecutor.execute(testplan.get(testCase));
 	}

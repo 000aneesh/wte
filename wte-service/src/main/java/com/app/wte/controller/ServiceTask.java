@@ -140,6 +140,7 @@ public class ServiceTask {
 				}
 			}
 		}
+		bufferedReader.close();
 
 	}
 

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -59,10 +60,10 @@ public class SpringController {
 	}
 
 	@GetMapping(path = "/getTemplates")
-	public ResponseEntity<List<String>> templateDeatils()
+	public ResponseEntity<Set<String>> templateDeatils()
 			throws InvalidFormatException, IllegalStateException, IOException {
 
-		List<String> list = confComponent.getTemplates();
+		Set<String> list = confComponent.getTemplates();
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
@@ -104,8 +105,8 @@ public class SpringController {
 	@ResponseBody
 	public ResponseEntity<Resource> getFile(@PathVariable String filePath, @PathVariable String fileName)
 			throws IOException {
-		System.out.println("file : " + filePath + File.separator + fileName);
-		Resource file = storageService.loadFile(filePath + File.separator + "TestData" + File.separator +  fileName);
+		System.out.println("file : " + filePath+File.separator+"TestData" + File.separator + fileName);
+		Resource file = storageService.loadFile(filePath + File.separator+"TestData" + File.separator + fileName);
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
 				.body(file);
