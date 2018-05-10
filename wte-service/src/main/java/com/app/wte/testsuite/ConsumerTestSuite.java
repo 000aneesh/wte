@@ -26,7 +26,7 @@ public class ConsumerTestSuite extends TestSuite {
 		taskList.add(fileGenerationStep);
 		taskList.add(fTPTransferStep);
 		taskList.add(dBValidationStep);
-		taskList.add(dataVerificationStep);
+		//taskList.add(dataVerificationStep);
 	}
 	
 	@Override

@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @SuppressWarnings("serial")
-public class TestCaseUI implements Serializable {
+public class TestRunUI implements Serializable {
 
     @NotNull
     private int id = -1;

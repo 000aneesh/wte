@@ -70,6 +70,7 @@ public class ProcessingView extends Processing implements View {
 			// split at "/", add each part as a label
 			String[] params = event.getParameters().split("/");
 			String testCase = params[0];
+			String template = params[1];
 			System.out.println("testCase : " + testCase);
 
 			UI.getCurrent().setPollInterval(500);
@@ -78,14 +79,14 @@ public class ProcessingView extends Processing implements View {
 			// String executionStep = executionSteps[0];
 			setTimeout(() -> {
 				try {
-					updateStatus(testCase);
+					updateStatus(testCase, template);
 				} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
 						| SecurityException e) {
 					e.printStackTrace();
 				}
 			}, 1000);
 			
-			downloadButton.addClickListener(evnt -> download(testCase));
+			
 			
 			pageInit();
 			/*
@@ -98,9 +99,11 @@ public class ProcessingView extends Processing implements View {
 		}
 	}
 
-	public void updateStatus(String testCase)
+	public void updateStatus(String testCase, String template)
 			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 
+//		downloadButton.addClickListener(evnt -> download(testCase, template));
+		
 		processStatus = new HashMap<String, String>();
 
 		// ui.access(() -> progressBar0.setValue(0.1f));
@@ -146,6 +149,8 @@ public class ProcessingView extends Processing implements View {
 				// Processing.class.getField("progressBar" + index).setFloat(this, 1.0f);
 				if (ExecutionStepType.FileGeneration.getExecutionStep().equals(executionStep)) {
 					processCompleted(progressBar0, success0, fail0);
+					download(testCase, template);
+					downloadButton.setVisible(true);
 				} else if (ExecutionStepType.FTPTransfer.getExecutionStep().equals(executionStep)) {
 					processCompleted(progressBar1, success1, fail1);
 				} else if (ExecutionStepType.ProcessValidationEdgeToRaw.getExecutionStep().equals(executionStep)) {
@@ -252,6 +257,7 @@ public class ProcessingView extends Processing implements View {
 	
 	private void pageInit() {
 		//progressBar0.setWidth(200, Sizeable.Unit.PIXELS);
+		downloadButton.setVisible(false);
 		fail0.setVisible(false);
 		fail1.setVisible(false);
 		fail2.setVisible(false);
@@ -266,8 +272,8 @@ public class ProcessingView extends Processing implements View {
 		success5.setVisible(false);
 	}
 	
-	private void download(String testCase) {
-		StreamResource myResource = createResource(testCase);
+	private void download(String testCase, String template) {
+		StreamResource myResource = createResource(testCase, template);
         FileDownloader fileDownloader = new FileDownloader(myResource);
         if(fileDownloader.getExtensions()!=null && fileDownloader.getExtensions().size()>0){
              fileDownloader.remove();
@@ -276,13 +282,13 @@ public class ProcessingView extends Processing implements View {
 
 	}
 	
-	public StreamResource createResource(String testCase) {
+	public StreamResource createResource(String testCase, String template) {
 
         return new StreamResource(new StreamSource() {
                @Override
                public InputStream getStream() {
                      try {
-                    	String filePath = uploadPath + File.separator + testCase + File.separator + "TestData" + File.separator +  testCase + ".txt";
+                    	String filePath = uploadPath + File.separator + testCase + File.separator + "TestData" + File.separator +  template + "_" +testCase + ".txt";
                     	File file = new File(filePath);
                             return new FileInputStream(file);
                      } catch (FileNotFoundException e) {

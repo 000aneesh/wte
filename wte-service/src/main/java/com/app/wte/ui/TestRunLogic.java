@@ -21,25 +21,25 @@ import com.vaadin.spring.annotation.SpringComponent;
  */
 @SuppressWarnings("serial")
 @SpringComponent
-public class TestCaseLogic implements Serializable {
+public class TestRunLogic implements Serializable {
 
-	private TestCaseView view;
+	private TestRunView view;
 
 	@Scope(scopeName = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	@SpringComponent
-	public static class TestCaseLogicFactory {
+	public static class TestRunLogicFactory {
 
 		@Autowired
 		private ApplicationContext context;
 
-		public TestCaseLogic createLogic(TestCaseView view) {
-			TestCaseLogic logic = context.getBean(TestCaseLogic.class);
+		public TestRunLogic createLogic(TestRunView view) {
+			TestRunLogic logic = context.getBean(TestRunLogic.class);
 			logic.init(view);
 			return logic;
 		}
 	}
 
-	private TestCaseLogic() {
+	private TestRunLogic() {
 	}
 
 	public void init() {
@@ -66,7 +66,7 @@ public class TestCaseLogic implements Serializable {
 		}
 
 		Page page = MainUI.get().getPage();
-		page.setUriFragment("!" + TestCaseView.VIEW_PATH + "/" + fragmentParameter, false);
+		page.setUriFragment("!" + TestRunView.VIEW_PATH + "/" + fragmentParameter, false);
 	}
 
 	public void enter(String productId) {
@@ -108,7 +108,7 @@ public class TestCaseLogic implements Serializable {
 		setFragmentParameter("");
 	}
 
-	public void editProduct(TestCaseUI product) {
+	public void editProduct(TestRunUI product) {
 		if (product == null) {
 			setFragmentParameter("");
 		} else {
@@ -120,15 +120,15 @@ public class TestCaseLogic implements Serializable {
 	public void newTestCase() {
 		view.clearSelection();
 		setFragmentParameter("new");
-		view.editProduct(new TestCaseUI());
+		view.editProduct(new TestRunUI());
 	}
 
-	public void rowSelected(TestCaseUI product) {
+	public void rowSelected(TestRunUI product) {
 		view.editProduct(product);
 
 	}
 
-	private void init(TestCaseView view) {
+	private void init(TestRunView view) {
 		this.view = view;
 	}
 }

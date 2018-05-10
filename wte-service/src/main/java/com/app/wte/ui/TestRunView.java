@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.app.wte.ui.HomeView.HomeFormFactory;
-import com.app.wte.ui.TestCaseLogic.TestCaseLogicFactory;
+import com.app.wte.ui.TestRunLogic.TestRunLogicFactory;
 import com.vaadin.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -28,12 +28,12 @@ import com.vaadin.ui.themes.ValoTheme;
  * operations and controlling the view based on events from outside.
  */
 @SuppressWarnings("serial")
-@SpringView(name = TestCaseView.VIEW_PATH)
-public class TestCaseView extends CssLayout implements View {
+@SpringView(name = TestRunView.VIEW_PATH)
+public class TestRunView extends CssLayout implements View {
 
-	public static final String VIEW_NAME = "TEST CASE";
+	public static final String VIEW_NAME = "TEST RUN";
 	
-	public static final String VIEW_PATH = "testCase";
+	public static final String VIEW_PATH = "testRun";
 
 	@Autowired
 	private HomeFormFactory formFactory;
@@ -42,14 +42,14 @@ public class TestCaseView extends CssLayout implements View {
 
 	private HomeView form;
 
-	private TestCaseLogic viewLogic;
+	private TestRunLogic viewLogic;
 
 	private Button newProduct;
 
 	@Autowired
-	private TestCaseLogicFactory logicFactory;
+	private TestRunLogicFactory logicFactory;
 	private TextField filter;
-	private ConfigurableFilterDataProvider<TestCaseUI, Void, String> filterDataProvider;
+	private ConfigurableFilterDataProvider<TestRunUI, Void, String> filterDataProvider;
 
 	public HorizontalLayout createTopBar() {
 		filter = new TextField();
@@ -102,7 +102,7 @@ public class TestCaseView extends CssLayout implements View {
 		return grid.getSelectedRow();
 	}
 
-	public void editProduct(TestCaseUI product) {
+	public void editProduct(TestRunUI product) {
 		if (product != null) {
 			form.addStyleName("visible");
 			form.setEnabled(true);

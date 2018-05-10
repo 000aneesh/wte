@@ -48,8 +48,8 @@ import com.vaadin.ui.Upload.SucceededListener;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class HomeView extends Home {
 
-    private TestCaseLogic viewLogic;
-    private final Binder<TestCaseUI> binder = new BeanValidationBinder<>(TestCaseUI.class);
+    private TestRunLogic viewLogic;
+    private final Binder<TestRunUI> binder = new BeanValidationBinder<>(TestRunUI.class);
 
     @Value("${upload-path}")
 	private String uploadPath;
@@ -72,19 +72,19 @@ public class HomeView extends Home {
         @Autowired
         private ApplicationContext context;
 
-        public HomeView createForm(TestCaseLogic logic) {
+        public HomeView createForm(TestRunLogic logic) {
             HomeView form = context.getBean(HomeView.class);
             form.init(logic);
             return form;
         }
     }
     
-    private TestCaseUI currentProduct;
+    private TestRunUI currentProduct;
 
     private HomeView() {
     }
 
-    public void editProduct(TestCaseUI product) {
+    public void editProduct(TestRunUI product) {
         currentProduct = product;
         setUpData();
 
@@ -138,7 +138,7 @@ public class HomeView extends Home {
         }
     }
 
-    private void init(TestCaseLogic logic) {
+    private void init(TestRunLogic logic) {
         viewLogic = logic;
     }
 
@@ -267,7 +267,7 @@ public class HomeView extends Home {
 
 			testEngine.createTestSuite(testCase.getValue(), fileName, templateName.getValue(), testCase.getValue());
 
-			getUI().getNavigator().navigateTo(WTEConstants.PROCESSINGVIEW + "/" + testCase.getValue());
+			getUI().getNavigator().navigateTo(WTEConstants.PROCESSINGVIEW + "/" + testCase.getValue() + "/" + templateName.getValue());
 
 		}
 
